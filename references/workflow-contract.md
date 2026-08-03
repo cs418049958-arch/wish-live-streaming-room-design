@@ -84,7 +84,7 @@ Sticker-integrated scene or product imagery may appear only when it is part of t
 
 ### 4.2 Styled board
 
-Use the structure board as ImageGen reference image 1 and the approved Phase 1 image only as a style and occupied-space reference. Create `02-贴片设计母板-16x9.jpg`.
+Use the structure board as ImageGen reference image 1 and the approved Phase 1 image as reference image 2. For the initial Phase 2 generation, send exactly `将图1的贴片设计根据图2的直播间风格创作，生成三张不同的版本给我，图片比例16:9` as the entire ImageGen prompt, with no additions before or after it. Save the three directions as `02-贴片设计母板-16x9-01.jpg` through `02-贴片设计母板-16x9-03.jpg`.
 
 Transfer:
 
