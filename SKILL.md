@@ -61,9 +61,9 @@ Stop. Until explicit approval, revise only Phase 1.
 
 1. Extract every marketing sticker from the visual contract into a clean `1920 x 1080` white structure board. Keep every sticker visible, separated, uncropped, and labeled by its exact copy and grouping. Save as `02-贴片结构母板-16x9.jpg`.
 2. Use that board as ImageGen reference image 1. Use the approved Phase 1 image only as the style-system reference; its stage and products establish available sticker space but must not be copied onto the board.
-3. By default, ask ImageGen for three sticker-design directions for the user to choose from. For the initial Phase 2 generation, send exactly this complete prompt and nothing before or after it: `将图1的贴片设计根据图2的直播间风格创作，生成三张不同的版本给我，图片比例16:9`. Do not expand, explain, qualify, or append any requirement to this ImageGen prompt.
+3. Ask ImageGen to redesign the sticker family while preserving exact quantity, copy, order, grouping, independent-versus-combined state, and internal hierarchy. Do not generate a room, host, stage, or physical product in this call.
 4. If ImageGen alters Chinese copy, numbers, units, or footnotes, keep its approved shape and material design but restore the exact text with deterministic typesetting before review. Never approve garbled text.
-5. Save the three styled directions as `02-贴片设计母板-16x9-01.jpg` through `02-贴片设计母板-16x9-03.jpg`.
+5. Save the styled result as `02-贴片设计母板-16x9.jpg`.
 
 Run Phase 2 QA, show the board, and ask exactly:
 
