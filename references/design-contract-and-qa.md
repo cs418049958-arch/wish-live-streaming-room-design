@@ -181,7 +181,7 @@ When the hero product or room is explicitly `除螨喷雾`, apply only the exclu
 
 ### Styled board requirements
 
-By default, build three simple, clearly different sticker families for selection. For each direction, use purposeful variation:
+Build one family with purposeful variation:
 
 - one or two primary material families;
 - different scale and silhouette for primary, secondary, data, and evidence modules;
@@ -245,7 +245,7 @@ Do not ask ImageGen to “improve the whole image” during a coordinate-only co
 
 ## 10. Multiple directions
 
-For Phase 2, generate three directions by default. When alternatives are requested in any phase:
+When the user requests alternatives:
 
 - Phase 1 directions should differ in title structure, scene mechanism, stage form, product presentation, depth, or material;
 - Phase 2 directions should differ in sticker contour, material, information hierarchy, or edge treatment;
