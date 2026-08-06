@@ -61,6 +61,8 @@ Exclude:
 
 This phase decides spatial mood, title hierarchy, host styling, camera, palette, material language, foreground depth, product hierarchy, stage perspective, and product-stage association. Generate the foreground stage and products now so their silhouette, scale, occlusion, and visual center are evaluated before stickers are designed. Do not spend prompt budget on later-stage information modules.
 
+For every seated-host composition without an explicit contrary instruction, lock the host to the camera center with a frontal face and torso, a seated pose and shoulder line square to the lens, and pair the host with a centered left-right-symmetrical table shown in straight-on front view. Push the host-table group toward the camera so it reads as the close foreground. Reject unintended off-axis, three-quarter, oblique-table, or distant-midground results before review.
+
 After QA, ask:
 
 `是否确认当前背景、标题、人物、前景展台与产品方向？确认后我将设计16:9贴片母板。`
