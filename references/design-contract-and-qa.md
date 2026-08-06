@@ -59,6 +59,18 @@ Create the contract before Phase 1. Keep it in working notes or prompts; show it
 | Scene | room type, camera, palette, lighting, depth, safe areas |
 | Decor | permitted motifs, density, placement rhythm, title-bound or sticker-bound |
 
+### Seated-host default
+
+Apply this default whenever the plan includes a seated host and no explicit contrary direction exists:
+
+- center the host on the frame and camera axis;
+- keep the face, torso, seated pose, and shoulder line fully frontal and square to the lens;
+- use a foreground table with a straight-on front elevation, centered axis, and left-right-symmetrical silhouette;
+- move the host and table together toward the camera; make the host read at a close conversational scale and the table read as the near foreground anchor;
+- reject an unintended three-quarter body angle, sloped shoulder line, oblique/elliptical table perspective, off-axis placement, or small distant table.
+
+Treat the user's latest explicit instruction or annotated planning layout as an override for any requested off-center, side-facing, three-quarter, asymmetrical, or distant composition. Override only the named attribute; retain the remaining defaults.
+
 ### B. Asset-ownership map
 
 Classify each element once:
@@ -163,6 +175,8 @@ Design the top title as a visual system, not a text box:
 - make stage scale, product count, product hierarchy, product-stage association, and occlusion legible before Phase 2;
 - exclude every non-title marketing sticker, including stage-face copy and benefit badges.
 
+When the host is seated, enforce the seated-host default in Section 2 before judging title or decor: host centered and frontal, shoulder line square to camera, table symmetrical and straight-on, and the host-table group pushed into the close foreground.
+
 If the plan does not require a person, do not invent one merely because Phase 1 supports hosts.
 
 When the hero product or room is explicitly `除螨喷雾`, apply only the exclusive main-title font-style and rejection rules in `dust-mite-spray-title-system.md`. Do not let that reference prescribe color, title-region coverage, materials, backing shapes, effects, decoration, or subtitle styling, and do not generalize it to other categories.
@@ -260,6 +274,7 @@ When the user requests alternatives:
 - [ ] title has intentional hierarchy and design strength;
 - [ ] when the room is explicitly for `除螨喷雾`, every dedicated title-font check in `dust-mite-spray-title-system.md` passes without overriding the planned color or title-area design;
 - [ ] host count, adult identity, pose, clothing, and safe area are correct when applicable;
+- [ ] when the host is seated and no override exists, the host is centered and frontal with a camera-square shoulder line, the table is a centered left-right-symmetrical front view, and both read close to the camera rather than in the midground;
 - [ ] physical foreground stage count, shape, material, perspective, and position match the plan when applicable;
 - [ ] product reference, exact count, packaging, scale, hierarchy, coordinates, and stage association are correct;
 - [ ] products are visually clear and not blocked by the title, person, stage edge, or UI;
