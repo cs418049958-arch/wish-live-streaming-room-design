@@ -37,6 +37,7 @@ Inspect `assets/four-phase-reference/` when the supplied planning material resem
    - `physical product`.
 4. Treat the latest user annotation as the highest-priority spatial instruction. Do not allow a style reference to override planning content or relationships.
 5. If the product category is `除螨喷雾`, add only the conditional title-font contract from `references/dust-mite-spray-title-system.md` to the immutable Phase 1 requirements and its QA checklist. Derive every color, material, title region, backing shape, and decorative treatment from the current planning material and user references.
+6. When the plan calls for a seated host and the user does not explicitly specify another camera or pose, apply the seated-host default: center the host on the camera axis; keep the face, torso, seated pose, and shoulder line square to the lens; render the foreground table as a left-right-symmetrical straight-on front view; and move the host-table group toward the camera so the table reads as a close foreground anchor rather than a small midground prop. Treat any later explicit request for an off-center host, side pose, three-quarter view, or oblique table as an override.
 
 ### 1. Spatial-skeleton approval
 
@@ -105,6 +106,7 @@ Run `scripts/validate_live_room_layers.py` and inspect its composite preview. Us
 - Keep each ImageGen prompt phase-specific. Never include inactive-phase requirements “for completeness”; the staged workflow exists to prevent long-prompt omissions.
 - In Phase 2, the white structure board must be reference image 1 and the approved Phase 1 visual must be used only to transfer palette, material, contour, typography, decorative rhythm, and awareness of the occupied foreground area.
 - Repeat the current immutable-element list in every revision prompt. After each edit, verify the requested change and every previously correct locked item.
+- For a seated host, repeat the centered frontal host, camera-square shoulder line, symmetrical straight-on table, and close-foreground distance in the immutable list unless the user explicitly overrides one of them.
 - Require natural adult anatomy, correct Chinese, exact product counts, clear packaging, safe margins, and a usable host area.
 - Reject repeated pure-white rounded cards, default-office typography, flat banner titles, equal-weight modules, and unrelated decorative stickers.
 - For a `除螨喷雾` room, reject Phase 1 before presentation when any dedicated title-font guardrail in `references/dust-mite-spray-title-system.md` fails. Do not defer a typography problem to a later phase.
