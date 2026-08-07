@@ -5,7 +5,7 @@ description: Design high-impact, production-ready 9:16 ecommerce live-streaming 
 
 # Wish Live Streaming Room Design
 
-Turn a rough livestream plan into a high-design 9:16 visual through four small, separately approved generation and composition stages. Generate the spatial skeleton—background, title, host, foreground stage, and products—together in Phase 1 so their perspective and visual center are judged as one composition. Keep marketing stickers out of that call and design them separately in Phase 2.
+Turn a rough livestream plan into a high-design 9:16 visual through four small, separately approved generation and composition stages. Generate the spatial skeleton—background, title, host, foreground stage, and only explicitly requested products—together in Phase 1 so their perspective and visual center are judged as one composition. Keep marketing stickers out of that call and design them separately in Phase 2.
 
 ## Required references
 
@@ -38,6 +38,8 @@ Inspect `assets/four-phase-reference/` when the supplied planning material resem
 4. Treat the latest user annotation as the highest-priority spatial instruction. Do not allow a style reference to override planning content or relationships.
 5. If the product category is `除螨喷雾`, add only the conditional title-font contract from `references/dust-mite-spray-title-system.md` to the immutable Phase 1 requirements and its QA checklist. Derive every color, material, title region, backing shape, and decorative treatment from the current planning material and user references.
 6. When the plan calls for a seated host and the user does not explicitly specify another camera or pose, apply the seated-host default: center the host on the camera axis; keep the face, torso, seated pose, and shoulder line square to the lens; render the foreground table as a left-right-symmetrical straight-on front view; and move the host-table group toward the camera so the table reads as a close foreground anchor rather than a small midground prop. Treat any later explicit request for an off-center host, side pose, three-quarter view, or oblique table as an override.
+7. Treat the planning draft as content and functional authority, not as a default background visual to reproduce. Preserve its required room type, business relationships, host pose, mandatory objects, and safe areas, but redesign the background layout, furniture arrangement, perspective depth, material system, lighting, and thematic decoration. Reject a first-pass background that mainly traces the plan, swaps colors, or changes only small decor. Allow close reproduction only when the user explicitly requests it.
+8. Set the Phase 1 physical-product count to `0` by default. A product shown incidentally or illustratively in the planning draft does not authorize product inclusion. Add physical products only when the user or planning text explicitly requires them, then lock the specified references and exact count. Otherwise keep every table and stage free of product packs, models, silhouettes, and placeholders throughout later revisions.
 
 ### 1. Spatial-skeleton approval
 
@@ -47,7 +49,7 @@ Generate one 9:16 approval image, or the requested number of genuinely different
 - top title system, title-bound logos, subtitle, and header decoration;
 - adult host or hosts only when the plan calls for people;
 - physical foreground stage, counter, table, plinth, or product stand when the plan calls for it;
-- referenced hero and secondary products, with exact count, packaging, scale, hierarchy, placement, and stage association;
+- referenced hero and secondary products only when explicitly requested, with exact count, packaging, scale, hierarchy, placement, and stage association; otherwise no physical product of any kind;
 - palette, lighting, material language, depth, host safe area, and platform-UI safe area.
 
 Exclude all non-title marketing stickers. Do not place temporary copy cards on the stage. Save as `01-背景标题人物展台产品.jpg`.
@@ -107,6 +109,8 @@ Run `scripts/validate_live_room_layers.py` and inspect its composite preview. Us
 - In Phase 2, the white structure board must be reference image 1 and the approved Phase 1 visual must be used only to transfer palette, material, contour, typography, decorative rhythm, and awareness of the occupied foreground area.
 - Repeat the current immutable-element list in every revision prompt. After each edit, verify the requested change and every previously correct locked item.
 - For a seated host, repeat the centered frontal host, camera-square shoulder line, symmetrical straight-on table, and close-foreground distance in the immutable list unless the user explicitly overrides one of them.
+- In every first-pass Phase 1 prompt, state that the planning draft controls required content and relationships but must not donate its background composition. Require a visibly new spatial layout, furniture arrangement, depth, material, lighting, and decor system unless the user explicitly requests replication.
+- In every first-pass Phase 1 prompt, set physical products to `0` unless explicit inclusion is recorded in the visual contract. When the count is `0`, repeat “no pack, product model, silhouette, or placeholder” in all later Phase 1 edit locks.
 - Require natural adult anatomy, correct Chinese, exact product counts, clear packaging, safe margins, and a usable host area.
 - Reject repeated pure-white rounded cards, default-office typography, flat banner titles, equal-weight modules, and unrelated decorative stickers.
 - For a `除螨喷雾` room, reject Phase 1 before presentation when any dedicated title-font guardrail in `references/dust-mite-spray-title-system.md` fails. Do not defer a typography problem to a later phase.

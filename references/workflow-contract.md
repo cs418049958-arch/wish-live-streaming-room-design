@@ -19,7 +19,7 @@ Read planning material in visual order and identify:
 
 - brand, channel, campaign, product category, and audience;
 - exact title, selling points, offer text, evidence text, footnotes, and disclaimers;
-- product references, exact pack counts, hero/secondary hierarchy, and stage association;
+- explicit product-inclusion instructions, product references, exact pack counts, hero/secondary hierarchy, and stage association; default to zero physical products when inclusion is not explicit;
 - room type, camera, host count and styling, safe areas, and platform UI;
 - every sticker, video window, scene card, benefit badge, report panel, and service module;
 - references that are directional only and may not donate copy, brands, prices, products, or claims.
@@ -32,7 +32,7 @@ Before generation, complete the contract in `design-contract-and-qa.md`.
 
 Record:
 
-- every element, copy item, number, unit, marker, product count, and footnote;
+- every element, copy item, number, unit, marker, product count, and footnote; record the product count as `0` unless inclusion is explicit;
 - combined-versus-independent sticker behavior;
 - exact adjacency, alignment, embedding, occlusion, and reading order;
 - reference purpose and conflict priority;
@@ -51,7 +51,7 @@ Include:
 - top title system and title-bound logos, subtitle, and decoration;
 - adult host preview when required;
 - physical foreground stage, counter, table, podium, plinth, or product stand when required;
-- referenced hero and secondary products with exact count, packaging, scale, hierarchy, coordinates, and stage association;
+- referenced hero and secondary products with exact count, packaging, scale, hierarchy, coordinates, and stage association only when explicitly required;
 - live-host and platform-UI safe areas.
 
 Exclude:
@@ -59,7 +59,11 @@ Exclude:
 - all non-title marketing stickers;
 - stage-face promotional copy, badges, data, reports, benefits, and service modules.
 
-This phase decides spatial mood, title hierarchy, host styling, camera, palette, material language, foreground depth, product hierarchy, stage perspective, and product-stage association. Generate the foreground stage and products now so their silhouette, scale, occlusion, and visual center are evaluated before stickers are designed. Do not spend prompt budget on later-stage information modules.
+This phase decides spatial mood, title hierarchy, host styling, camera, palette, material language, foreground depth, stage perspective, and—only when explicitly required—product hierarchy and product-stage association. Generate the foreground stage now when required. Generate products with it only after the visual contract records explicit inclusion and an exact count. Do not spend prompt budget on later-stage information modules.
+
+Treat the planning draft as authority for required content, functional relationships, room type, host pose, mandatory objects, and safe areas, but not as a background composition to trace by default. Rebuild the background's spatial layout, furniture placement, perspective depth, material language, lighting, and thematic decoration. A recolor, minor prop swap, or near-copy of the planning background fails Phase 1 unless the user explicitly requests close reproduction.
+
+Set the first-pass physical-product count to `0` by default. A pack shot shown only as an illustration or placeholder in the planning draft is not an explicit inclusion instruction. Without explicit inclusion, keep tables and stages free of product packs, models, silhouettes, and placeholders, and carry that zero-product state into all Phase 1 revisions.
 
 For every seated-host composition without an explicit contrary instruction, lock the host to the camera center with a frontal face and torso, a seated pose and shoulder line square to the lens, and pair the host with a centered left-right-symmetrical table shown in straight-on front view. Push the host-table group toward the camera so it reads as the close foreground. Reject unintended off-axis, three-quarter, oblique-table, or distant-midground results before review.
 

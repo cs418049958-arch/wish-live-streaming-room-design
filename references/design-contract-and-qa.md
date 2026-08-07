@@ -50,7 +50,7 @@ Create the contract before Phase 1. Keep it in working notes or prompts; show it
 | Category | Required fields |
 | --- | --- |
 | Host | count, adult identity, pose, clothing, action, position, preview-only or fixed |
-| Product | reference, exact count, hero/secondary role, scale, position, stage association |
+| Product | explicit inclusion source; default count `0`; when included: reference, exact count, hero/secondary role, scale, position, stage association |
 | Title | exact copy, region, line hierarchy, title-bound logos and decoration |
 | Stage | count, shape, material, product association, position |
 | Sticker | exact copy, count, contour, combined/independent state, position |
@@ -70,6 +70,23 @@ Apply this default whenever the plan includes a seated host and no explicit cont
 - reject an unintended three-quarter body angle, sloped shoulder line, oblique/elliptical table perspective, off-axis placement, or small distant table.
 
 Treat the user's latest explicit instruction or annotated planning layout as an override for any requested off-center, side-facing, three-quarter, asymmetrical, or distant composition. Override only the named attribute; retain the remaining defaults.
+
+### First-pass background differentiation
+
+Use the planning draft to lock required content and function, not to donate a background composition by default:
+
+- preserve the required room or outdoor type, host pose, mandatory environmental objects, business relationships, and safe areas;
+- redesign the room layout, architecture/furniture placement, camera depth, foreground-midground-background organization, materials, lighting, and thematic decoration;
+- reject near-copy wall, window, bed, cabinet, desk, or scenery coordinates, as well as results that differ only through recolor or small-prop replacement;
+- allow close background reproduction only when the user explicitly asks to retain or replicate that scene.
+
+### First-pass no-product default
+
+- record the Phase 1 physical-product count as `0` unless the user or planning text explicitly requires product inclusion;
+- do not treat an illustrative pack shot or placeholder visible in a planning image as an inclusion instruction;
+- when the count is `0`, keep the stage and table free of product packs, boxes, models, silhouettes, and placeholders;
+- lock the zero-product state during title, host, background, palette, and other local edits;
+- after explicit inclusion, replace the default with the requested references and exact count.
 
 ### B. Asset-ownership map
 
@@ -114,7 +131,7 @@ Repeat relevant immutable items in every edit prompt.
 
 State the purpose of each attached image:
 
-- `策划稿：控制全部内容、层级与空间关系`;
+- `策划稿：控制必需内容、层级、功能关系、场景属性与安全区；默认不复制其背景构图`;
 - `贴片结构母板：控制贴片数量、文案、组合关系和顺序`;
 - `第一步确认图：控制贴片的配色、材质、轮廓、字体和节奏，并显示展台与产品已经占用的空间`;
 - `产品图：只控制包装外观、比例和数量`;
@@ -166,6 +183,7 @@ Reject a technically complete result when it reads as a PPT card wall.
 
 Design the top title as a visual system, not a text box:
 
+- create a background spatial composition that is visibly distinct from the planning draft unless close reproduction was explicitly requested;
 - follow the required title region and width;
 - establish clear primary and secondary copy hierarchy;
 - use arcs, rings, folds, layered planes, glow, controlled cropping, or offsets when appropriate;
@@ -174,6 +192,7 @@ Design the top title as a visual system, not a text box:
 - create foreground, midground, and background depth with the stage and products forming the approved foreground anchor;
 - make stage scale, product count, product hierarchy, product-stage association, and occlusion legible before Phase 2;
 - exclude every non-title marketing sticker, including stage-face copy and benefit badges.
+- keep physical products absent by default; include them only when the visual contract records explicit authorization and an exact count.
 
 When the host is seated, enforce the seated-host default in Section 2 before judging title or decor: host centered and frontal, shoulder line square to camera, table symmetrical and straight-on, and the host-table group pushed into the close foreground.
 
@@ -261,7 +280,7 @@ Do not ask ImageGen to “improve the whole image” during a coordinate-only co
 
 When the user requests alternatives:
 
-- Phase 1 directions should differ in title structure, scene mechanism, stage form, product presentation, depth, or material;
+- Phase 1 directions should each differ from the planning background and from one another in title structure, scene mechanism, spatial layout, furniture arrangement, stage form, depth, material, or lighting; vary product presentation only when products were explicitly requested;
 - Phase 2 directions should differ in sticker contour, material, information hierarchy, or edge treatment;
 - keep the visual contract identical;
 - vary at least three relevant systems;
@@ -270,14 +289,16 @@ When the user requests alternatives:
 ## 11. Phase 1 QA
 
 - [ ] scene, camera, lighting, and palette match the plan;
+- [ ] unless close reproduction was explicitly requested, the background is structurally distinct from the planning draft in layout, furniture/scenery placement, depth, material, lighting, and decoration—not merely recolored;
 - [ ] title copy, title-bound logos, subtitle, and decoration are correct;
 - [ ] title has intentional hierarchy and design strength;
 - [ ] when the room is explicitly for `除螨喷雾`, every dedicated title-font check in `dust-mite-spray-title-system.md` passes without overriding the planned color or title-area design;
 - [ ] host count, adult identity, pose, clothing, and safe area are correct when applicable;
 - [ ] when the host is seated and no override exists, the host is centered and frontal with a camera-square shoulder line, the table is a centered left-right-symmetrical front view, and both read close to the camera rather than in the midground;
 - [ ] physical foreground stage count, shape, material, perspective, and position match the plan when applicable;
-- [ ] product reference, exact count, packaging, scale, hierarchy, coordinates, and stage association are correct;
-- [ ] products are visually clear and not blocked by the title, person, stage edge, or UI;
+- [ ] without explicit product inclusion, physical-product count is exactly `0`, and no pack, box, model, silhouette, or placeholder appears on the table, stage, or scene;
+- [ ] when products were explicitly requested, product reference, exact count, packaging, scale, hierarchy, coordinates, and stage association are correct;
+- [ ] when products were explicitly requested, products are visually clear and not blocked by the title, person, stage edge, or UI;
 - [ ] no non-title marketing sticker, benefit card, data module, report card, or stage-face promotional copy appears;
 - [ ] later sticker, live-motion, and UI spaces remain usable around the approved foreground assets;
 - [ ] no planning annotation, watermark, or unsupported claim remains.
@@ -315,6 +336,7 @@ After every revision:
 - [ ] approved earlier-phase assets remain unchanged;
 - [ ] no previously correct item disappeared;
 - [ ] no duplicate, replacement, or unrelated object appeared;
+- [ ] a locked zero-product Phase 1 remains free of products and product placeholders;
 - [ ] copy remains readable and unblocked;
 - [ ] composition, palette, material, and camera did not drift.
 
