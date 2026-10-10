@@ -1,133 +1,56 @@
 ---
-name: wish-live-streaming-room-design
-description: Design high-impact, production-ready 9:16 ecommerce live-streaming rooms from planning screenshots, PPT drafts, spreadsheets, brand assets, product references, and visual references. Use a four-stage approval workflow that first confirms the background, title, host, foreground stage, and products in one composition, then confirms a 16:9 sticker asset board, the final sticker-coordinate composition, and production layers. Use when Codex must reduce ImageGen prompt overload, preserve exact planning relationships, create design-led marketing stickers, and deliver a pure background, transparent sticker atlas, transparent foreground stage-plus-products layer, and transparent top-title layer.
+name: wish-live-streaming-room-design-gpt6
+description: Design production-ready 9:16 Chinese ecommerce livestream rooms from planning screenshots, PPTs, spreadsheets, brand and product references. Use for Wish livestream room creation or revision requiring a unified scene, title, host preview, foreground stage, exact marketing stickers, staged approvals, and coordinate-locked transparent production layers. Apply ImageGen reference roles, scoped edits, deterministic text and compositing, and reconstruction QA.
 ---
 
-# Wish Live Streaming Room Design
+# Wish 直播间设计 GPT-6
 
-Turn a rough livestream plan into a high-design 9:16 visual through four small, separately approved generation and composition stages. Generate the spatial skeleton—background, title, host, foreground stage, and only explicitly requested products—together in Phase 1 so their perspective and visual center are judged as one composition. Keep marketing stickers out of that call and design them separately in Phase 2.
+Create an original, coherent livestream visual and deliver assets that reconstruct its approved preview. Keep four stages: (1) spatial composition, (2) sticker family, (3) final placement, (4) production assets. Do internal extraction and reconstruction **before** the relevant approval. Never ask the user to approve pixels that cannot be reproduced from the deliverable layers.
 
-## Required references
+## Read as needed
 
-Read before acting:
+- `references/workflow-contract.md`: stage gates, interpretation, revisions, approvals. Read for every task.
+- `references/design-contract-and-qa.md`: concept, priority, asset ownership, QA. Read for every task.
+- `references/prompt-templates.md`: phase-specific ImageGen and edit prompts. Read before generation.
+- `references/layer-spec.md`: dimensions, alpha, manifest, validation. Read before Phase 1 extraction and Phase 4.
+- `references/dust-mite-spray-title-system.md`: **only** when main product/room is explicitly 除螨喷雾. It governs main-title font alone.
 
-- `references/workflow-contract.md`: four approval gates, stage ownership, revisions, and deliverables.
-- `references/design-contract-and-qa.md`: visual contract, design-strength rules, and QA for each stage.
-- `references/prompt-templates.md`: phase-specific ImageGen prompts.
-- `references/layer-spec.md`: production layer ownership, dimensions, transparency, and validation.
+Inspect `assets/four-phase-reference/` only to clarify stage ownership. Never reuse its campaign, products, layout, or style.
 
-Conditional reference:
+## 0. Interpret and art-direct
 
-- When the brief explicitly identifies the hero product or room as `除螨喷雾`, read and enforce the typography-only rules in `references/dust-mite-spray-title-system.md` before writing any Phase 1 prompt. This font-style rule is exclusive to dust-mite-removal spray rooms; it must not prescribe title-region coverage, palette, materials, lighting, backing shapes, or decoration, and must not apply to other product categories.
+1. Inspect every supplied page and image. Make a compact visual contract with exact copy, numbers, products, people, relationships, safe areas, reference roles, and evidence for each inclusion. Assign each element one owner: scene, top title, host preview, physical stage/product, or marketing sticker.
+2. Distinguish explicit physical product placement from illustrative product imagery. Default to **zero physical products** unless user or planning text requires placement. Lock reference appearance and exact count when requested. Do not invent a host.
+3. Resolve conflicts by latest user annotation, explicit plan, identity references, approved visual, then style references. Current user instructions override defaults. Redesign the planning background unless close reproduction was requested.
+4. Write one sentence for the visual concept. Connect scene, title, stage, and stickers with a consistent motif and hierarchy. For alternatives, change at least three meaningful systems, such as architecture, title, stage, material/light; do not offer recolors as different directions.
+5. Record host, product, stage, and UI regions and occlusion. A seated host defaults to frontal, centered, close to camera with a symmetrical straight-on table only where the plan provides no contrary pose, camera, placement, or table instruction. Preserve unoverridden attributes.
 
-Inspect `assets/four-phase-reference/` when the supplied planning material resembles a planning-board workflow or when stage ownership is unclear. `背景+标题+人物+前景的展台和产品.png` demonstrates the required Phase 1 scope, while `贴片结构母板-16x9.jpg` demonstrates Phase 2 separation. Use them only to understand stage ownership. Never reuse their campaign copy, products, layout, or style.
+## 1. Approve the spatial composition
 
-## Non-negotiable workflow
+Create a 9:16 concept containing scene, top title, required adult host preview, foreground stage, and **only explicitly required** physical products. Exclude ordinary marketing stickers and placeholders. Number every input image by role. Quote exact short title text and inspect it; typeset deterministically if inaccurate. The generated host is a live-camera preview surrogate unless a fixed virtual host is requested.
 
-### 0. Interpret and contract
+Before showing the image, internally derive a pure background, coordinate-locked title RGBA, stage-plus-products RGBA when applicable, and host-preview RGBA when a generated host appears. Inpaint newly exposed background areas, preserve accepted object edges, then recompose **from those very layers**. Fix extraction, copy, occlusion, and drift before presenting `01-空间构图预览.jpg`. An attractive flattened image alone cannot pass. The approved reconstructed preview is the Phase 1 master.
 
-1. Inspect every supplied planning page, annotation, product image, logo, person reference, and style reference.
-2. Convert them into a visual contract: exact content, quantities, copy, reference purposes, element relationships, immutable items, safe areas, and final asset ownership.
-3. Classify every element before generating:
-   - `scene`;
-   - `top title system`;
-   - `host preview`;
-   - `marketing sticker`;
-   - `physical stage`;
-   - `physical product`.
-4. Treat the latest user annotation as the highest-priority spatial instruction. Do not allow a style reference to override planning content or relationships.
-5. If the product category is `除螨喷雾`, add only the conditional title-font contract from `references/dust-mite-spray-title-system.md` to the immutable Phase 1 requirements and its QA checklist. Derive every color, material, title region, backing shape, and decorative treatment from the current planning material and user references.
-6. When the plan calls for a seated host and the user does not explicitly specify another camera or pose, apply the seated-host default: center the host on the camera axis; keep the face, torso, seated pose, and shoulder line square to the lens; render the foreground table as a left-right-symmetrical straight-on front view; and move the host-table group toward the camera so the table reads as a close foreground anchor rather than a small midground prop. Treat any later explicit request for an off-center host, side pose, three-quarter view, or oblique table as an override.
-7. Treat the planning draft as content and functional authority, not as a default background visual to reproduce. Preserve its required room type, business relationships, host pose, mandatory objects, and safe areas, but redesign the background layout, furniture arrangement, perspective depth, material system, lighting, and thematic decoration. Reject a first-pass background that mainly traces the plan, swaps colors, or changes only small decor. Allow close reproduction only when the user explicitly requests it.
-8. Set the Phase 1 physical-product count to `0` by default. A product shown incidentally or illustratively in the planning draft does not authorize product inclusion. Add physical products only when the user or planning text explicitly requires them, then lock the specified references and exact count. Otherwise keep every table and stage free of product packs, models, silhouettes, and placeholders throughout later revisions.
+Ask for confirmation of the actual elements present. Stop until explicit approval; rebuild affected layers for Phase 1 revisions.
 
-### 1. Spatial-skeleton approval
+## 2. Approve the marketing sticker family
 
-Generate one 9:16 approval image, or the requested number of genuinely different Phase 1 directions. Every candidate may contain only:
+Make `02-贴片结构母板-16x9.jpg`: every sticker on a neutral 16:9 board with exact copy, grouping, sequence, and uncropped outlines. Use it as reference 1 for content and relationships; the approved Phase 1 preview is reference 2 for **style only** and occupied-space awareness. Generate the sticker shapes and material family separately from the room, host, stage, and products. Create purposeful differences in scale and contour.
 
-- background environment and spatial perspective;
-- top title system, title-bound logos, subtitle, and header decoration;
-- adult host or hosts only when the plan calls for people;
-- physical foreground stage, counter, table, plinth, or product stand when the plan calls for it;
-- referenced hero and secondary products only when explicitly requested, with exact count, packaging, scale, hierarchy, placement, and stage association; otherwise no physical product of any kind;
-- palette, lighting, material language, depth, host safe area, and platform-UI safe area.
+Quote short exact text once per sticker. Restore long or wrong Chinese copy, numerals, units, labels, and footnotes by deterministic typesetting on approved shapes. Prepare separable RGBA sticker assets internally and build `02-贴片设计母板-16x9.jpg` **from those assets**. Ask for sticker design confirmation; stop until explicit approval.
 
-Exclude all non-title marketing stickers. Do not place temporary copy cards on the stage. Save as `01-背景标题人物展台产品.jpg`.
+## 3. Approve placement
 
-Run Phase 1 QA, show the image, and ask exactly:
+Composite approved Phase 1 layers and sticker assets at planned coordinates, respecting host and platform UI safe areas. Build `work/贴片定位层-9x16.png` from the same placed instances. Avoid full-frame ImageGen regeneration for placement. A local perspective or occlusion edit must change only its sticker asset and be checked against locked items.
 
-`是否确认当前背景、标题、人物、前景展台与产品方向？确认后我将设计16:9贴片母板。`
+Show `03-完整直播间预览.jpg` made by deterministic compositing. Ask for approval of full image and sticker positions; stop until explicit approval. A later Phase 1 or 2 revision reopens that phase and dependent approvals.
 
-Stop. Until explicit approval, revise only Phase 1.
+## 4. Deliver and verify
 
-### 2. Sticker asset-board approval
+Use approved sources. Deliver `背景.jpg`, `顶部大标题.png`, `前景展台+产品.png` when applicable, `贴片合集-16x9.png`, and `03-完整直播间预览.jpg`. Retain `work/贴片定位层-9x16.png` and `work/贴片清单.json`. Retain `work/人物预览层.png` for QA when a generated host appears; deliver `人物.png` only for a requested fixed virtual host.
 
-1. Extract every marketing sticker from the visual contract into a clean `1920 x 1080` white structure board. Keep every sticker visible, separated, uncropped, and labeled by its exact copy and grouping. Save as `02-贴片结构母板-16x9.jpg`.
-2. Use that board as ImageGen reference image 1. Use the approved Phase 1 image only as the style-system reference; its stage and products establish available sticker space but must not be copied onto the board.
-3. Ask ImageGen to redesign the sticker family while preserving exact quantity, copy, order, grouping, independent-versus-combined state, and internal hierarchy. Do not generate a room, host, stage, or physical product in this call.
-4. If ImageGen alters Chinese copy, numbers, units, or footnotes, keep its approved shape and material design but restore the exact text with deterministic typesetting before review. Never approve garbled text.
-5. Save the styled result as `02-贴片设计母板-16x9.jpg`.
+Coordinate layers are 1080×1920 at origin (0,0); atlas is 1920×1080 with transparent gutters. Inspect real alpha, text, packaging, edges, ownership, and UI clearance. Run `scripts/validate_live_room_layers.py` with approved full preview, sticker manifest, and preview host if present. Inspect reconstructed preview and difference report; correct mismatches before delivery. The script checks structure and pixels; visually review content and identity.
 
-Run Phase 2 QA, show the board, and ask exactly:
+Use the `imagegen` skill and built-in ImageGen for generated images and edits. Inspect local edit targets with `view_image`. Request real transparency; use `scripts/chroma_to_alpha.py` only when an unavoidable chroma matte has no key color in the subject. Do not promise model or exact API parameters unavailable in the built-in tool. If the user explicitly chooses an API/model workflow, follow authorized controls and normalize delivery dimensions once.
 
-`是否确认当前贴片设计？确认后我将按策划稿位置合成完整直播间预览。`
-
-Stop. Until explicit approval, revise only the sticker board. Do not alter approved Phase 1.
-
-### 3. Coordinate composition approval
-
-1. Use the approved Phase 1 visual—including its locked foreground stage and products—as the unchanged base.
-2. Place the approved stickers according to the plan without moving, replacing, duplicating, or regenerating the approved stage or products.
-3. Prefer deterministic layer composition. Do not use full-image ImageGen regeneration merely to place assets. If one sticker needs perspective integration, edit only that sticker with a strict whitelist.
-4. Create both:
-   - `03-完整直播间预览.jpg`;
-   - internal `work/贴片定位层-9x16.png`, containing all non-title marketing stickers at final coordinates on a full transparent 1080 x 1920 canvas.
-
-Run Phase 3 and regression QA, show the preview, and ask exactly:
-
-`是否确认当前完整成品及贴片位置？确认后我将输出透明贴片合集、纯背景、前景展台+产品和顶部大标题。`
-
-Stop. Until explicit approval, revise only composition, scale, or the affected previously approved asset. Never silently redesign Phase 1 or Phase 2.
-
-### 4. Production separation
-
-Use the latest explicitly approved Phase 3 preview and its approved source assets as the sole production master. Output:
-
-- `贴片合集-16x9.png`: all approved non-title marketing stickers, separated on one transparent 1920 x 1080 canvas;
-- `背景.jpg`: pure 1080 x 1920 scene with no title, host, stickers, stage, or products;
-- `前景展台+产品.png`: coordinate-locked 1080 x 1920 transparent layer containing the approved physical foreground stage and referenced products; this is required whenever either appears in Phase 1;
-- `顶部大标题.png`: coordinate-locked 1080 x 1920 transparent layer containing the approved top title system and title-bound logos, subtitle, and decoration.
-
-Retain `work/贴片定位层-9x16.png` for validation and provide it when the user requests a one-click positioned overlay or editable placement reference. A generated host is a composition surrogate for the live camera and is not a default production asset; output `人物.png` only when the user explicitly needs a fixed virtual host.
-
-Run `scripts/validate_live_room_layers.py` and inspect its composite preview. Use `scripts/chroma_to_alpha.py` when a generated PNG has an opaque chroma matte. Do not redesign, restyle, reframe, or move approved elements during separation.
-
-## Image generation rules
-
-- Use the `imagegen` skill and ImageGen for every generative image creation or edit. Inspect each local target with `view_image` before editing.
-- Keep each ImageGen prompt phase-specific. Never include inactive-phase requirements “for completeness”; the staged workflow exists to prevent long-prompt omissions.
-- In Phase 2, the white structure board must be reference image 1 and the approved Phase 1 visual must be used only to transfer palette, material, contour, typography, decorative rhythm, and awareness of the occupied foreground area.
-- Repeat the current immutable-element list in every revision prompt. After each edit, verify the requested change and every previously correct locked item.
-- For a seated host, repeat the centered frontal host, camera-square shoulder line, symmetrical straight-on table, and close-foreground distance in the immutable list unless the user explicitly overrides one of them.
-- In every first-pass Phase 1 prompt, state that the planning draft controls required content and relationships but must not donate its background composition. Require a visibly new spatial layout, furniture arrangement, depth, material, lighting, and decor system unless the user explicitly requests replication.
-- In every first-pass Phase 1 prompt, set physical products to `0` unless explicit inclusion is recorded in the visual contract. When the count is `0`, repeat “no pack, product model, silhouette, or placeholder” in all later Phase 1 edit locks.
-- Require natural adult anatomy, correct Chinese, exact product counts, clear packaging, safe margins, and a usable host area.
-- Reject repeated pure-white rounded cards, default-office typography, flat banner titles, equal-weight modules, and unrelated decorative stickers.
-- For a `除螨喷雾` room, reject Phase 1 before presentation when any dedicated title-font guardrail in `references/dust-mite-spray-title-system.md` fails. Do not defer a typography problem to a later phase.
-- Do not treat a white, black, checkerboard, or chroma matte as transparency. Every PNG production layer must contain a real alpha channel with both transparent and visible pixels.
-
-## Output location
-
-Use the user-selected directory. If none is provided, use `outputs/wish-live-streaming-room-design/` under the current workspace. Keep temporary boards, masks, keyed renders, and previews in `work/`.
-
-## Completion criteria
-
-Do not claim completion unless:
-
-- the user explicitly approved Phases 1, 2, and 3 in sequence;
-- every phase passed its content, relationship, design-strength, and regression QA;
-- the final preview preserves the approved Phase 1 scene, title, host, foreground stage, products, and the approved Phase 2 sticker system;
-- `背景.jpg`, `前景展台+产品.png` when applicable, `顶部大标题.png`, and `work/贴片定位层-9x16.png` are coordinate-locked at 1080 x 1920;
-- `贴片合集-16x9.png` is 1920 x 1080 with separated, uncropped sticker assets;
-- all PNGs use true transparency;
-- the composite preview shows no coordinate drift, opaque matte, clipped edges, missing modules, or layer contamination.
+Save task output to the user-selected directory, or `outputs/wish-live-streaming-room-design-gpt6/` in the workspace, with intermediates in `work/`. Do not claim completion without three explicit phase approvals and passing reconstruction review.

@@ -1,225 +1,192 @@
 #!/usr/bin/env python3
-"""Validate four-stage livestream-room production assets and render a preview."""
+"""Check livestream layer structure, sticker manifest, and preview reconstruction."""
 
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
-from PIL import Image, ImageChops
+from PIL import Image, ImageChops, ImageDraw, ImageStat
 
-
-COORDINATE_SIZE = (1080, 1920)
+COORD_SIZE = (1080, 1920)
 ATLAS_SIZE = (1920, 1080)
 
 
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        description=(
-            "Validate a pure background, transparent title, transparent sticker atlas, "
-            "positioned sticker layer, and optional stage-products/live layers."
-        )
-    )
-    parser.add_argument("--background", type=Path, required=True)
-    parser.add_argument("--title", type=Path, required=True)
-    parser.add_argument("--sticker-atlas", type=Path, required=True)
-    parser.add_argument("--positioned-stickers", type=Path, required=True)
-    parser.add_argument("--stage-products", type=Path)
-    parser.add_argument("--live", type=Path, help="Optional fixed virtual-host RGBA layer")
-    parser.add_argument("--full", type=Path, help="Approved Phase 3 preview for size checks")
-    parser.add_argument("--preview", type=Path, help="Optional JPEG or PNG composite preview")
-    parser.add_argument(
-        "--allow-proportional",
-        action="store_true",
-        help="Allow proportional 9:16 coordinate assets and a proportional 16:9 atlas",
-    )
-    return parser
+def arguments() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    for name in ("background", "title", "sticker-atlas", "positioned-stickers",
+                 "sticker-manifest", "full"):
+        parser.add_argument(f"--{name}", type=Path, required=True)
+    for name in ("stage-back", "stage-products", "preview-host", "live",
+                 "preview", "difference"):
+        parser.add_argument(f"--{name}", type=Path)
+    parser.add_argument("--max-mean-error", type=float, default=10.0)
+    parser.add_argument("--max-bad-fraction", type=float, default=0.02)
+    parser.add_argument("--bad-pixel-threshold", type=int, default=40)
+    return parser.parse_args()
 
 
-def open_image(path: Path) -> Image.Image:
-    if not path.is_file():
-        raise ValueError(f"missing file: {path}")
+def read_image(path: Path) -> Image.Image:
     image = Image.open(path)
     image.load()
     return image
 
 
-def ratio_matches(size: tuple[int, int], target: tuple[int, int]) -> bool:
-    width, height = size
-    target_width, target_height = target
-    return width > 0 and height > 0 and abs(width / height - target_width / target_height) <= 0.002
-
-
-def validate_size(
-    name: str,
-    image: Image.Image,
-    expected: tuple[int, int],
-    allow_proportional: bool,
-) -> list[str]:
-    if allow_proportional:
-        if not ratio_matches(image.size, expected):
-            return [f"{name}: expected ratio {expected[0]}:{expected[1]}, got {image.width}x{image.height}"]
-        return []
-    if image.size != expected:
-        return [f"{name}: expected {expected[0]}x{expected[1]}, got {image.width}x{image.height}"]
-    return []
-
-
-def alpha_report(
-    name: str,
-    image: Image.Image,
-    *,
-    require_gutter: bool = False,
-) -> tuple[list[str], str]:
-    errors: list[str] = []
-    if image.mode not in {"RGBA", "LA"}:
-        return [f"{name}: missing alpha channel; mode is {image.mode}"], "no-alpha"
-
+def alpha_check(name: str, image: Image.Image, *, gutter: bool = False) -> list[str]:
+    if image.mode not in ("RGBA", "LA"):
+        return [f"{name}: expected a real alpha channel; mode={image.mode}"]
     alpha = image.getchannel("A")
-    minimum, maximum = alpha.getextrema()
-    bbox = alpha.getbbox()
-    if minimum != 0:
-        errors.append(f"{name}: no fully transparent pixels; alpha_min={minimum}")
-    if maximum == 0:
-        errors.append(f"{name}: layer is fully transparent")
+    low, high = alpha.getextrema()
+    errors = []
+    if low != 0 or high == 0:
+        errors.append(f"{name}: expected both transparent and visible pixels; alpha={low}..{high}")
+    bounds = alpha.getbbox()
+    if gutter and bounds and (bounds[0] == 0 or bounds[1] == 0
+                              or bounds[2] == image.width or bounds[3] == image.height):
+        errors.append(f"{name}: sticker atlas needs a transparent outer gutter")
+    if alpha.histogram()[1:] and sum(alpha.histogram()[1:]) > image.width * image.height * 0.92:
+        errors.append(f"{name}: nearly opaque layer suggests a painted matte")
+    return errors
 
-    if bbox is None:
-        bounds = "empty"
-        coverage = 0.0
-        errors.append(f"{name}: visible bounds are empty")
+
+def parse_box(box: object, size: tuple[int, int], label: str) -> tuple[int, int, int, int]:
+    if not isinstance(box, list) or len(box) != 4 or any(type(x) is not int for x in box):
+        raise ValueError(f"{label}: expected four integer coordinates")
+    left, top, right, bottom = box
+    if not (0 <= left < right <= size[0] and 0 <= top < bottom <= size[1]):
+        raise ValueError(f"{label}: box outside {size}: {box}")
+    return left, top, right, bottom
+
+
+def check_manifest(path: Path, atlas: Image.Image, positioned: Image.Image) -> list[str]:
+    errors = []
+    data = json.loads(path.read_text(encoding="utf-8"))
+    stickers = data.get("stickers") if isinstance(data, dict) else None
+    if not isinstance(stickers, list) or not stickers:
+        return ["sticker-manifest: stickers must be a nonempty array"]
+    seen = set()
+    atlas_coverage = Image.new("L", atlas.size, 0)
+    positioned_coverage = Image.new("L", positioned.size, 0)
+    atlas_mask = Image.new("L", atlas.size, 0)
+    atlas_draw = ImageDraw.Draw(atlas_coverage)
+    pos_draw = ImageDraw.Draw(positioned_coverage)
+    mask_draw = ImageDraw.Draw(atlas_mask)
+    for index, sticker in enumerate(stickers):
+        label = f"sticker[{index}]"
+        if not isinstance(sticker, dict) or not isinstance(sticker.get("id"), str) or not sticker["id"]:
+            errors.append(f"{label}: missing id")
+            continue
+        sticker_id = sticker["id"]
+        if sticker_id in seen:
+            errors.append(f"{label}: duplicate id {sticker_id}")
+        seen.add(sticker_id)
+        try:
+            atlas_box = parse_box(sticker.get("atlas_bbox"), atlas.size, f"{label}.atlas_bbox")
+            pos_box = parse_box(sticker.get("position_bbox"), positioned.size, f"{label}.position_bbox")
+        except ValueError as exc:
+            errors.append(str(exc))
+            continue
+        if atlas_box[0] == 0 or atlas_box[1] == 0 or atlas_box[2] == atlas.width or atlas_box[3] == atlas.height:
+            errors.append(f"{label}: atlas box lacks an outer gutter")
+        if atlas_mask.crop(atlas_box).getbbox():
+            errors.append(f"{label}: atlas box overlaps another sticker box")
+        mask_draw.rectangle((atlas_box[0], atlas_box[1], atlas_box[2]-1, atlas_box[3]-1), fill=255)
+        atlas_draw.rectangle((atlas_box[0], atlas_box[1], atlas_box[2]-1, atlas_box[3]-1), fill=255)
+        pos_draw.rectangle((pos_box[0], pos_box[1], pos_box[2]-1, pos_box[3]-1), fill=255)
+        if not atlas.getchannel("A").crop(atlas_box).getbbox():
+            errors.append(f"{label}: empty atlas box")
+        if not positioned.getchannel("A").crop(pos_box).getbbox():
+            errors.append(f"{label}: empty positioned box")
+    for label, image, coverage in (
+        ("sticker-atlas", atlas, atlas_coverage),
+        ("positioned-stickers", positioned, positioned_coverage),
+    ):
+        if ImageChops.subtract(image.getchannel("A"), coverage).getbbox():
+            errors.append(f"{label}: visible pixels outside manifest boxes")
+    print(f"MANIFEST {len(stickers)} sticker(s), {len(seen)} unique IDs")
+    return errors
+
+
+def compose(images: dict[str, Image.Image]) -> Image.Image:
+    canvas = images["background"].convert("RGBA")
+    for name in ("stage_back", "preview_host", "live", "title",
+                 "stage_products", "positioned_stickers"):
+        if name in images:
+            canvas.alpha_composite(images[name].convert("RGBA"))
+    return canvas
+
+
+def save(image: Image.Image, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.suffix.lower() in (".jpg", ".jpeg"):
+        image.convert("RGB").save(path, quality=95)
     else:
-        bounds = str(bbox)
-        histogram = alpha.histogram()
-        visible = sum(histogram[1:])
-        coverage = visible / (image.width * image.height)
-        if coverage > 0.92:
-            errors.append(f"{name}: visible coverage {coverage:.1%} suggests an opaque matte")
-        if require_gutter:
-            left, top, right, bottom = bbox
-            if left <= 0 or top <= 0 or right >= image.width or bottom >= image.height:
-                errors.append(f"{name}: visible content touches the canvas edge; transparent gutter required")
-
-    return errors, f"alpha={minimum}..{maximum} bbox={bounds} visible={coverage:.1%}"
+        image.save(path)
 
 
-def require_opaque_background(image: Image.Image) -> list[str]:
-    if image.mode not in {"RGBA", "LA"}:
-        return []
-    alpha = image.getchannel("A")
-    opaque = Image.new("L", image.size, 255)
-    if ImageChops.difference(alpha, opaque).getbbox():
-        return ["background: must be fully opaque"]
-    return []
-
-
-def save_preview(
-    background: Image.Image,
-    title: Image.Image,
-    positioned_stickers: Image.Image,
-    stage_products: Image.Image | None,
-    live: Image.Image | None,
-    destination: Path,
-) -> None:
-    canvas = background.convert("RGBA")
-    if live is not None:
-        canvas.alpha_composite(live.convert("RGBA"))
-    canvas.alpha_composite(title.convert("RGBA"))
-    if stage_products is not None:
-        canvas.alpha_composite(stage_products.convert("RGBA"))
-    canvas.alpha_composite(positioned_stickers.convert("RGBA"))
-
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    if destination.suffix.lower() in {".jpg", ".jpeg"}:
-        canvas.convert("RGB").save(destination, quality=95)
-    else:
-        canvas.save(destination)
+def compare(composite: Image.Image, full: Image.Image, args: argparse.Namespace) -> list[str]:
+    difference = ImageChops.difference(composite.convert("RGB"), full.convert("RGB"))
+    if args.difference:
+        # Boost subtle variation for visual inspection; metrics use the unmodified difference.
+        boosted = difference.point(lambda value: min(255, value * 4))
+        save(boosted, args.difference)
+    means = ImageStat.Stat(difference).mean
+    mean_error = sum(means) / 3
+    r, g, b = difference.split()
+    largest = ImageChops.lighter(ImageChops.lighter(r, g), b)
+    bad = largest.point(lambda value: 255 if value > args.bad_pixel_threshold else 0)
+    bad_fraction = bad.histogram()[255] / (full.width * full.height)
+    print(f"RECONSTRUCTION mean_error={mean_error:.3f} bad_fraction={bad_fraction:.4%} "
+          f"threshold={args.bad_pixel_threshold}")
+    errors = []
+    if mean_error > args.max_mean_error or bad_fraction > args.max_bad_fraction:
+        errors.append("full: reconstructed preview differs from approved preview beyond tolerance")
+    return errors
 
 
 def main() -> int:
-    args = build_parser().parse_args()
-    paths = {
-        "background": args.background,
-        "title": args.title,
-        "sticker_atlas": args.sticker_atlas,
-        "positioned_stickers": args.positioned_stickers,
-    }
-    if args.stage_products:
-        paths["stage_products"] = args.stage_products
-    if args.live:
-        paths["live"] = args.live
-    if args.full:
-        paths["full"] = args.full
-
+    args = arguments()
+    if args.preview_host and args.live:
+        print("FAIL choose --preview-host or --live, not both")
+        return 1
+    file_args = ("background", "title", "sticker_atlas", "positioned_stickers",
+                 "full", "stage_back", "stage_products", "preview_host", "live")
     try:
-        images = {name: open_image(path) for name, path in paths.items()}
+        images = {name: read_image(getattr(args, name)) for name in file_args
+                  if getattr(args, name) is not None}
     except (OSError, ValueError) as exc:
-        print(f"FAIL {exc}")
+        print(f"FAIL unable to open image: {exc}")
         return 1
-
-    errors: list[str] = []
-    coordinate_names = ["background", "title", "positioned_stickers"]
-    for optional_name in ("stage_products", "live", "full"):
-        if optional_name in images:
-            coordinate_names.append(optional_name)
-
-    for name in coordinate_names:
-        errors.extend(
-            validate_size(name, images[name], COORDINATE_SIZE, args.allow_proportional)
-        )
-    errors.extend(
-        validate_size(
-            "sticker_atlas",
-            images["sticker_atlas"],
-            ATLAS_SIZE,
-            args.allow_proportional,
-        )
-    )
-
-    coordinate_size = images["background"].size
-    for name in coordinate_names:
-        if images[name].size != coordinate_size:
-            errors.append(f"{name}: size {images[name].size} differs from background {coordinate_size}")
-
-    alpha_targets = [
-        ("title", False),
-        ("sticker_atlas", True),
-        ("positioned_stickers", False),
-    ]
-    if "stage_products" in images:
-        alpha_targets.append(("stage_products", False))
-    if "live" in images:
-        alpha_targets.append(("live", False))
-
-    for name, require_gutter in alpha_targets:
-        layer_errors, report = alpha_report(
-            name,
-            images[name],
-            require_gutter=require_gutter,
-        )
-        errors.extend(layer_errors)
-        print(f"{name}: {report}")
-
-    errors.extend(require_opaque_background(images["background"]))
-
-    if args.preview and not errors:
-        save_preview(
-            images["background"],
-            images["title"],
-            images["positioned_stickers"],
-            images.get("stage_products"),
-            images.get("live"),
-            args.preview,
-        )
-        print(f"PREVIEW {args.preview}")
-
-    if errors:
-        for error in errors:
-            print(f"ERROR {error}")
-        print(f"FAIL {len(errors)} validation error(s)")
-        return 1
-
-    print("PASS four-stage live-room production assets are structurally valid")
-    return 0
+    errors = []
+    size_errors = []
+    for name, image in images.items():
+        expected = ATLAS_SIZE if name == "sticker_atlas" else COORD_SIZE
+        if image.size != expected:
+            size_errors.append(f"{name}: expected {expected}, got {image.size}")
+    errors.extend(size_errors)
+    if images["background"].mode in ("RGBA", "LA") and images["background"].getchannel("A").getextrema() != (255, 255):
+        errors.append("background: must be fully opaque")
+    for name in ("title", "sticker_atlas", "positioned_stickers",
+                 "stage_back", "stage_products", "preview_host", "live"):
+        if name in images:
+            errors.extend(alpha_check(name, images[name], gutter=name == "sticker_atlas"))
+    if not errors:
+        try:
+            errors.extend(check_manifest(args.sticker_manifest, images["sticker_atlas"],
+                                         images["positioned_stickers"]))
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            errors.append(f"sticker-manifest: {exc}")
+    if not size_errors:
+        composite = compose(images)
+        if args.preview:
+            save(composite, args.preview)
+            print(f"PREVIEW {args.preview}")
+        errors.extend(compare(composite, images["full"], args))
+    for error in errors:
+        print(f"ERROR {error}")
+    print(f"{'FAIL' if errors else 'PASS'} {len(errors)} error(s)")
+    return 1 if errors else 0
 
 
 if __name__ == "__main__":

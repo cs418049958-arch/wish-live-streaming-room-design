@@ -1,355 +1,55 @@
-# Design Contract and Stage QA
-
-## Contents
+# Visual contract, creative direction, and QA
 
-1. Reference priority
-2. Visual contract and asset ownership
-3. Relationship vocabulary
-4. Design-strength standard
-5. Phase 1 visual system
-6. Phase 2 sticker system
-7. Stage, product, and copy integration
-8. Color, typography, and maturity
-9. Revision routing and local-edit whitelist
-10. Multiple directions
-11. Phase 1 QA
-12. Phase 2 QA
-13. Phase 3 QA
-14. Regression QA
-15. Production-layer QA
+## Contract table
 
-## 1. Reference priority
+For each element record `id | exact copy/count | required source | reference role | owner | region/relationship | immutable after phase`. Use owners `scene`, `top-title`, `host-preview`, `physical-stage`, `physical-product`, `marketing-sticker`. An explanatory product image inside a sticker belongs to that sticker; a pack placed on the stage is physical. A line of promotional text visually embedded on a stage still belongs to a sticker or title layer.
 
-Resolve conflicts in this order:
+Reference priority: latest user annotation or correction > explicit planning requirement > identity/packaging reference > current approved visual > earlier approved visual > style reference > model invention. A reference may control only its named role. The plan controls required room type and functional relationships; unless explicitly asked, do not trace its architecture, furniture coordinates, or colors.
 
-1. the user's latest annotated screenshot or explicit correction;
-2. explicit content and layout requirements in the planning draft;
-3. supplied product, logo, brand, and person identity references;
-4. the latest approved file from the current phase;
-5. approved files from earlier phases;
-6. directional style references;
-7. model interpretation.
+Record `combined`, `independent`, `above/below`, `left/right`, `aligned`, `supported by`, `in front of`, `behind`, and `overlapping without covering copy` precisely. Mark presenter motion range and platform UI no-go zones. Distinguish fixed virtual host from temporary generated host.
 
-Do not let an attractive style reference override required copy, product counts, grouping, ownership, or position.
+## Creative decision
 
-Assign every reference one or more purposes:
+Write one sentence naming the campaign idea and physical/graphic mechanism (for example, a particular architectural curve continuing into title and badge contours). Choose a limited repeatable set of shapes, materials, and accents. Allocate one dominant focal point, one supporting information rhythm, usable negative space, and a foreground anchor. Judge at phone size as well as full resolution. Reject a card-wall, uniform rounded panels, flat logo strip, random confetti, or copy-heavy stage front. Avoid adding unrelated objects merely to show creativity.
 
-- `content/layout authority`: wording, quantity, hierarchy, and spatial relationships;
-- `product identity`: packaging, color, proportion, and pack count;
-- `person identity`: requested adult host identity or appearance;
-- `style mechanism`: specified contour, material, lighting, layering, or rhythm.
+For alternatives, keep locked content identical while varying at least three of architecture, camera depth, title structure, stage geometry, lighting, material, and sticker contour. Do not require a prescribed motif if the brand reference points elsewhere.
 
-Interpret arrows, circles, frames, and handwritten marks as placement or relationship instructions. Remove them from finished visuals unless the user asks to retain them.
+Seated presenter default applies only when no explicit contrary planning or user direction covers that attribute: frontal face/torso, centered camera axis, close conversational scale, symmetric straight-on table. An override may affect only one attribute; retain the others. Product count defaults to zero unless explicit inclusion is recorded. Never add packs, silhouettes, boxes, placeholders, or new claims to a zero-product scene.
 
-## 2. Visual contract and asset ownership
+## ImageGen and text QA
 
-Create the contract before Phase 1. Keep it in working notes or prompts; show it only when useful.
+- Number every image and state its permitted job. Prevent a style reference from donating copy or products. Use generation for a new scene; use an edit target for changes to an approved image.
+- Start prompts with intended image and main subject; then composition, style, exact short text, locks, and concise avoid list. Remove inactive-phase instructions.
+- Quote each exact title or short sticker phrase and its count. Check all Chinese, numbers, units, brand names, and footnotes in the result. Use deterministic text compositing for dense or unstable wording; never fabricate data.
+- For requested physical products, compare silhouette, cap/trigger, label hierarchy, color, count, scale, and stage association with the supplied reference. Prefer protected source cutouts when an exact pack must be preserved.
+- For a local edit, request one change and check all invariants. Inspect the edited image before accepting it.
 
-### A. Content inventory
+If the main product or room is explicitly 除螨喷雾, also apply the font-only pass/fail checks in `dust-mite-spray-title-system.md`. Do not apply that conditional to other categories.
 
-| Category | Required fields |
-| --- | --- |
-| Host | count, adult identity, pose, clothing, action, position, preview-only or fixed |
-| Product | explicit inclusion source; default count `0`; when included: reference, exact count, hero/secondary role, scale, position, stage association |
-| Title | exact copy, region, line hierarchy, title-bound logos and decoration |
-| Stage | count, shape, material, product association, position |
-| Sticker | exact copy, count, contour, combined/independent state, position |
-| Data | item count, order, number, unit, marker, footnote |
-| Evidence | module count, hierarchy, approved wording, position |
-| Scene | room type, camera, palette, lighting, depth, safe areas |
-| Decor | permitted motifs, density, placement rhythm, title-bound or sticker-bound |
+## Gate QA
 
-### Seated-host default
+### Phase 1
 
-Apply this default whenever the plan includes a seated host and no explicit contrary direction exists:
+- Required scene, title, host, stage, and explicitly placed products match content and layout; absent elements stay absent.
+- Background differs structurally from the planning mockup unless replication was requested.
+- Concept links title, scene, and foreground without sacrificing host/UI space.
+- Product identity, exact count, anatomy, title text, safe areas, and natural overlap pass.
+- Pure background inpaints removed areas cleanly. RGBA title/stage/host edges have no halo, matte, clipped contour, or unintended pixels. Internal recomposite reproduces the preview.
 
-- center the host on the frame and camera axis;
-- keep the face, torso, seated pose, and shoulder line fully frontal and square to the lens;
-- use a foreground table with a straight-on front elevation, centered axis, and left-right-symmetrical silhouette;
-- move the host and table together toward the camera; make the host read at a close conversational scale and the table read as the near foreground anchor;
-- reject an unintended three-quarter body angle, sloped shoulder line, oblique/elliptical table perspective, off-axis placement, or small distant table.
+### Phase 2
 
-Treat the user's latest explicit instruction or annotated planning layout as an override for any requested off-center, side-facing, three-quarter, asymmetrical, or distant composition. Override only the named attribute; retain the remaining defaults.
+- Every module has one ID and correct grouping, sequence, text, unit, footnote, shape, and alpha cutout.
+- Atlas-ready assets reconstruct the styled board; no room/host/stage/physical product contaminates the sticker assets.
+- Hierarchy works at phone size; silhouettes vary purposefully; no copy is unreadable.
 
-### First-pass background differentiation
+### Phase 3
 
-Use the planning draft to lock required content and function, not to donate a background composition by default:
+- Approved Phase 1 and 2 pixels remain stable. Sticker coordinates, scale, hierarchy, gaps, UI avoidance, and occlusion match plan.
+- The positioned layer is built from the same sticker files and transforms used by the preview.
+- No old position, duplicate, hidden footnote, or unsupported claim remains.
 
-- preserve the required room or outdoor type, host pose, mandatory environmental objects, business relationships, and safe areas;
-- redesign the room layout, architecture/furniture placement, camera depth, foreground-midground-background organization, materials, lighting, and thematic decoration;
-- reject near-copy wall, window, bed, cabinet, desk, or scenery coordinates, as well as results that differ only through recolor or small-prop replacement;
-- allow close background reproduction only when the user explicitly asks to retain or replicate that scene.
+### Production and regression
 
-### First-pass no-product default
-
-- record the Phase 1 physical-product count as `0` unless the user or planning text explicitly requires product inclusion;
-- do not treat an illustrative pack shot or placeholder visible in a planning image as an inclusion instruction;
-- when the count is `0`, keep the stage and table free of product packs, boxes, models, silhouettes, and placeholders;
-- lock the zero-product state during title, host, background, palette, and other local edits;
-- after explicit inclusion, replace the default with the requested references and exact count.
-
-### B. Asset-ownership map
-
-Classify each element once:
-
-| Ownership | Includes | Excludes |
-| --- | --- | --- |
-| Scene | architecture, floor, distant furniture, environmental light | title, host, sticker, stage, product |
-| Top title | main title, title-bound logo, subtitle, header shape and decoration | ordinary marketing stickers |
-| Host preview | adult host used to judge scale and safe area | stage, product, sticker |
-| Marketing sticker | benefits, data, reports, service strip, scene card, PIP frame, footnote | physical stage and hero product |
-| Physical stage | table, counter, podium, plinth, product stand | graphic copy and badges |
-| Physical product | referenced pack shots placed on or near the stage | sticker-integrated explanatory miniatures |
-
-For ambiguous items, decide ownership before Phase 1. An image inside a scenario card is a sticker; a hero product placed on the stage is a physical product.
-
-### C. Element-relation map
-
-Record each fragile relationship:
-
-| Element A | Relation | Element B | Constraint |
-| --- | --- | --- | --- |
-| [data group] | combined with | [data items] | one inseparable sticker |
-| [badge 1] | independent from | [badge 2] | never merge |
-| [badges] | left/right/above/below | [hero product] | preserve a clear gap |
-| [copy] | visually embedded in | [stage fascia] | production ownership remains sticker |
-| [secondary product] | supported by | [secondary stage] | never move to hero stage |
-
-Position and relationship are first-class requirements, not optional styling notes.
-
-### D. Immutable list
-
-After each phase approval, lock:
-
-- Phase 1: scene, camera, title system, host, foreground stage, products, product-stage association, palette, lighting, and safe areas;
-- Phase 2: sticker count, copy, grouping, contour family, material, and hierarchy;
-- Phase 3: sticker scale, final coordinates, overlap, avoidance, density, and reading order.
-
-Repeat relevant immutable items in every edit prompt.
-
-### E. Reference-use map
-
-State the purpose of each attached image:
-
-- `策划稿：控制必需内容、层级、功能关系、场景属性与安全区；默认不复制其背景构图`;
-- `贴片结构母板：控制贴片数量、文案、组合关系和顺序`;
-- `第一步确认图：控制贴片的配色、材质、轮廓、字体和节奏，并显示展台与产品已经占用的空间`;
-- `产品图：只控制包装外观、比例和数量`;
-- `风格图：只控制指定的材质或设计机制`.
-
-## 3. Relationship vocabulary
-
-Use precise spatial words:
-
-- combined / inseparable;
-- independent / disconnected;
-- embedded in;
-- adjacent to;
-- aligned with;
-- above / below / left / right;
-- in front of / behind;
-- overlapping without covering copy;
-- supported by;
-- sharing one stage;
-- using a separate stage.
-
-Do not use “place nearby” when the annotation specifies a relationship or region.
-
-## 4. Design-strength standard
-
-The final room should satisfy at least four applicable criteria:
-
-- a title with two-level hierarchy, offset, overlap, cropping, interlock, or controlled motion;
-- clear size, shape, or material contrast between primary and secondary modules;
-- sticker contours with selective notches, layered borders, interruptions, or transparent depth;
-- information integrated with a stage, ring, arc, architectural edge, or perspective plane;
-- clear foreground, midground, and background occlusion;
-- campaign decoration connected to the scene rather than scattered evenly;
-- intentional negative space for the host and platform UI;
-- a repeated motif linking title, stickers, stage, and environment.
-
-Reject a technically complete result when it reads as a PPT card wall.
-
-### Prohibited shortcuts
-
-- repeating the same white rounded rectangle for all information;
-- distributing every module at equal size and weight;
-- pasting stage copy on an unrelated white card;
-- using a flat brand-color strip plus default text as the title;
-- mixing unrelated title, sticker, and stage systems;
-- adding decorative motifs without hierarchy or spatial purpose.
-
-## 5. Phase 1 visual system
-
-Design the top title as a visual system, not a text box:
-
-- create a background spatial composition that is visibly distinct from the planning draft unless close reproduction was explicitly requested;
-- follow the required title region and width;
-- establish clear primary and secondary copy hierarchy;
-- use arcs, rings, folds, layered planes, glow, controlled cropping, or offsets when appropriate;
-- make title-bound decoration support recognition;
-- reserve open space for later stickers, host motion, and UI around the actual foreground stage and products;
-- create foreground, midground, and background depth with the stage and products forming the approved foreground anchor;
-- make stage scale, product count, product hierarchy, product-stage association, and occlusion legible before Phase 2;
-- exclude every non-title marketing sticker, including stage-face copy and benefit badges.
-- keep physical products absent by default; include them only when the visual contract records explicit authorization and an exact count.
-
-When the host is seated, enforce the seated-host default in Section 2 before judging title or decor: host centered and frontal, shoulder line square to camera, table symmetrical and straight-on, and the host-table group pushed into the close foreground.
-
-If the plan does not require a person, do not invent one merely because Phase 1 supports hosts.
-
-When the hero product or room is explicitly `除螨喷雾`, apply only the exclusive main-title font-style and rejection rules in `dust-mite-spray-title-system.md`. Do not let that reference prescribe color, title-region coverage, materials, backing shapes, effects, decoration, or subtitle styling, and do not generalize it to other categories.
-
-## 6. Phase 2 sticker system
-
-### Structure board requirements
-
-- 1920 x 1080 white background;
-- every sticker fully visible and separated by clear gutters;
-- combined modules remain combined;
-- independent modules remain independent;
-- exact text, numbers, units, order, footnotes, and labels;
-- no physical stage, hero product, host, or room scenery;
-- neutral structure styling that does not compete with content.
-
-### Styled board requirements
-
-Build one family with purposeful variation:
-
-- one or two primary material families;
-- different scale and silhouette for primary, secondary, data, and evidence modules;
-- enough contrast for Chinese copy and numbers;
-- selective notches, underlays, rings, strokes, edge light, or translucent depth;
-- typography, contour, and material related to approved Phase 1;
-- all assets separated, uncropped, and reusable.
-
-Do not turn the 16:9 board into a miniature room composition. Its job is asset design and review.
-If ImageGen text fidelity fails, preserve the approved shape/material design and restore exact contract text deterministically before review.
-
-## 7. Stage, product, and copy integration
-
-Use the physical stage to establish:
-
-- hero and secondary product hierarchy;
-- foreground depth and perspective;
-- a transition between scenery and campaign graphics;
-- a visual anchor for the main benefit;
-- a connection point for recurring motifs.
-
-Valid visual integration includes translucent fascia, perspective information bands, rings crossing the stage edge, tinted acrylic, controlled type cropping, or a small illuminated benefit.
-
-Production ownership remains separate:
-
-- stage body and table-top hero products -> `前景展台+产品.png`;
-- marketing copy, outlines, labels, and graphic accents -> sticker assets and `贴片定位层-9x16.png`.
-
-The sticker may visually hug the stage without being flattened into the physical stage layer.
-
-## 8. Color, typography, and maturity
-
-Derive a dominant base, campaign accent, neutral support, and optional material highlight from brand and references.
-
-- separate scene and sticker values sufficiently;
-- do not make all stickers pure white;
-- use accent color for hierarchy rather than blanket saturation;
-- use metallic tones only as controlled highlights;
-- avoid accidental vintage yellow in warm-white rooms unless requested.
-
-Prefer contemporary sans-serif typography unless the brand requires otherwise. Avoid default office fonts, traditional plaque lettering, unsupported calligraphy, childish bubble type, and illegible body copy.
-
-Aim for mature, modern ecommerce energy. Avoid both hard red-gold conference staging and overly cute universal capsules.
-
-## 9. Revision routing and local-edit whitelist
-
-Route changes to the owning phase:
-
-- Phase 1: scene, title, host, palette, camera, global material, stage, product, or product-stage relationship;
-- Phase 2: sticker content, count, grouping, contour, material, or type;
-- Phase 3: sticker scale, coordinates, overlap, avoidance, density, or reading order.
-
-For each local edit, write:
-
-- `Allowed change`;
-- `Old state to clear`;
-- `New state`;
-- `Locked items`.
-
-Do not ask ImageGen to “improve the whole image” during a coordinate-only correction. After two failed local edits, regenerate only the affected phase.
-
-## 10. Multiple directions
-
-When the user requests alternatives:
-
-- Phase 1 directions should each differ from the planning background and from one another in title structure, scene mechanism, spatial layout, furniture arrangement, stage form, depth, material, or lighting; vary product presentation only when products were explicitly requested;
-- Phase 2 directions should differ in sticker contour, material, information hierarchy, or edge treatment;
-- keep the visual contract identical;
-- vary at least three relevant systems;
-- never present recolors of the same design.
-
-## 11. Phase 1 QA
-
-- [ ] scene, camera, lighting, and palette match the plan;
-- [ ] unless close reproduction was explicitly requested, the background is structurally distinct from the planning draft in layout, furniture/scenery placement, depth, material, lighting, and decoration—not merely recolored;
-- [ ] title copy, title-bound logos, subtitle, and decoration are correct;
-- [ ] title has intentional hierarchy and design strength;
-- [ ] when the room is explicitly for `除螨喷雾`, every dedicated title-font check in `dust-mite-spray-title-system.md` passes without overriding the planned color or title-area design;
-- [ ] host count, adult identity, pose, clothing, and safe area are correct when applicable;
-- [ ] when the host is seated and no override exists, the host is centered and frontal with a camera-square shoulder line, the table is a centered left-right-symmetrical front view, and both read close to the camera rather than in the midground;
-- [ ] physical foreground stage count, shape, material, perspective, and position match the plan when applicable;
-- [ ] without explicit product inclusion, physical-product count is exactly `0`, and no pack, box, model, silhouette, or placeholder appears on the table, stage, or scene;
-- [ ] when products were explicitly requested, product reference, exact count, packaging, scale, hierarchy, coordinates, and stage association are correct;
-- [ ] when products were explicitly requested, products are visually clear and not blocked by the title, person, stage edge, or UI;
-- [ ] no non-title marketing sticker, benefit card, data module, report card, or stage-face promotional copy appears;
-- [ ] later sticker, live-motion, and UI spaces remain usable around the approved foreground assets;
-- [ ] no planning annotation, watermark, or unsupported claim remains.
-
-## 12. Phase 2 QA
-
-- [ ] board is 16:9 and every sticker is fully visible;
-- [ ] sticker quantity, copy, numbers, units, order, markers, and footnotes are exact;
-- [ ] combined modules remain combined and independent modules remain independent;
-- [ ] no physical stage, hero product, host, or room scenery appears;
-- [ ] sticker family clearly inherits Phase 1 palette, material, contour, and rhythm;
-- [ ] primary, secondary, data, and evidence modules have purposeful variation;
-- [ ] no duplicate, omitted, merged, cropped, garbled, or invented item appears;
-- [ ] the result is an asset board, not a miniature complete room.
-
-## 13. Phase 3 QA
-
-- [ ] Phase 1 scene, title, host, camera, palette, lighting, foreground stage, and products did not drift;
-- [ ] Phase 2 sticker design, count, copy, and grouping did not drift;
-- [ ] every sticker matches plan-defined scale, position, order, and relationship;
-- [ ] product count, packaging, scale, hierarchy, stage association, perspective, and coordinates remain identical to approved Phase 1;
-- [ ] foreground depth and stage occlusion remain credible after sticker placement;
-- [ ] stickers avoid faces, product labels, platform UI, and important stage copy;
-- [ ] old positions and placeholders are fully cleared;
-- [ ] final density, reading order, and visual center are balanced;
-- [ ] `work/贴片定位层-9x16.png` matches the preview coordinates.
-
-## 14. Regression QA
-
-After every revision:
-
-- [ ] requested change is complete;
-- [ ] old state is fully cleared;
-- [ ] current-phase immutable items remain unchanged;
-- [ ] approved earlier-phase assets remain unchanged;
-- [ ] no previously correct item disappeared;
-- [ ] no duplicate, replacement, or unrelated object appeared;
-- [ ] a locked zero-product Phase 1 remains free of products and product placeholders;
-- [ ] copy remains readable and unblocked;
-- [ ] composition, palette, material, and camera did not drift.
-
-Reject an edit that fixes the target but damages a locked item.
-
-## 15. Production-layer QA
-
-- [ ] all coordinate layers are 1080 x 1920 and remain at origin `(0, 0)`;
-- [ ] sticker atlas is 1920 x 1080 with transparent gutters;
-- [ ] `背景.jpg` contains only scenery and is fully opaque;
-- [ ] `顶部大标题.png` contains only the approved title system;
-- [ ] `前景展台+产品.png`, when present, contains only the approved physical foreground stage and products;
-- [ ] positioned sticker layer contains all and only non-title marketing stickers;
-- [ ] every PNG has real alpha with transparent and visible pixels;
-- [ ] no layer has white, black, checkerboard, or chroma matte contamination;
-- [ ] composite preview restores the approved Phase 3 structure without drift.
+- Approved copy, identity, product count, and relationships survive every revision.
+- The validator passes dimensions, alpha, manifest coverage, and full-preview comparison. Inspect the difference image and layered preview visually.
+- Keep a preview-only host out of the production delivery while using its retained layer for reconstruction QA. If stage/host occlusion needs multiple sublayers, deliver the needed stack with explicit order.

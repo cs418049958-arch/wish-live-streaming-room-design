@@ -1,113 +1,51 @@
-# Four-Stage ImageGen Prompt Templates
+# Phase-specific ImageGen prompt patterns
 
-Replace bracketed content with facts from the user's materials. Remove inactive sections instead of carrying them into another phase.
+Replace brackets with current-contract facts. Keep prompts brief and concrete; delete irrelevant blocks. The built-in image tool chooses its execution model, so do not put API parameters such as model, quality, or background flags in its prompt as if they were controls.
 
-## A. Phase 1: background, title, host, foreground stage, and products
+## Phase 1: spatial concept
 
-生成一张1080×1920、9:16竖版中文电商直播间第一阶段设计稿。本轮一次确认“背景空间＋顶部标题系统＋人物＋前景展台”，仅在明确要求时加入实体产品。前景展台必须直接进入完整构图，用于确认空间透视和前景视觉重心；实体产品默认数量为0，只有【产品授权】明确记录后才进入构图。禁止出现任何非标题营销贴片。
+```text
+Create a polished 9:16 Chinese ecommerce livestream room spatial concept for [brand/category/campaign]. One visual idea: [single-sentence concept]. The planning image controls required content, relationships, and safe areas; design a new background composition unless close reproduction was requested.
+References: image 1 = planning content and placement; image 2 = brand identity only; image 3 = physical product packaging only, if explicitly required; image 4 = adult host identity/wardrobe only, if required; image 5 = [specific material or lighting mechanism] only. Do not import reference copy or unrelated objects.
+Scene and framing: [room type, architecture, camera, foreground/midground/background, materials, light, host/UI occupancy].
+Top title: render exactly once "[exact short title]" at [region], with [hierarchy, logo, subtitle and permitted effects]. No extra text.
+Host: [count, adult appearance, position, pose, scale or omit]. Stage: [shape, count, location, material and occlusion or omit].
+Physical products: [zero, with no pack/model/placeholder OR exact count, reference, hierarchy, placement and association].
+Keep [critical protected items]. No ordinary marketing stickers, stage-face offer copy, annotations, watermarks, invented claims.
+```
 
-【参考图用途】
-- [策划稿：控制场景属性、必需内容、标题区域、人物姿态与安全区、前景展台及业务关系；默认不复制其背景构图；策划图里的产品示意不自动授权产品出现]
-- [品牌/Logo图：只控制品牌身份]
-- [人物图：只控制成年人物身份、服装或姿态]
-- [产品图：只控制包装外观、比例、数量和主次]
-- [风格图：只参考指定材质、光感、轮廓或节奏]
+For an explicitly seated host, add only the unoverridden frontal/center/near-table defaults. For 除螨喷雾, add **only** the conditional title-font requirement from its dedicated reference. After generation, verify title and product labels; correct exact type in editable overlays if needed.
 
-【空间与镜头】[房间或户外场景、机位、透视、前中后景、直播安全区、平台UI安全区。]
+## Phase 1: separation, one target per call
 
-【背景差异化】保留策划要求的场景属性、必需物品、人物关系和功能关系，但重新设计空间布局、建筑/家具位置、镜头景深、前中后景组织、材质、灯光与主题装饰。不得照搬墙体、窗户、床、桌柜或景观坐标；不得只换色、只换少量道具或近似复刻。仅当用户明确要求保留/复刻原场景时删除本段。
+```text
+Edit image 1, the selected spatial concept. Isolate only [top title OR stage and approved products OR adult host preview] on a genuinely transparent 9:16 canvas. Preserve the object's exact geometry, colors, position, lighting, and soft edges. Remove everything else. Do not recenter, restyle, add text, or paint a white/checkerboard background.
+```
 
-【顶部标题系统】[准确标题、副标题、标题绑定Logo、装饰结构、层级、位置与设计机制。]
+```text
+Edit image 1 to remove only [title, host, stage/products] and naturally restore the pure scenery behind them. Keep camera, architecture, unaffected pixels, perspective, lighting, and background objects unchanged. No text, packs, stage, person, marketing stickers, blur patches, or ghost edges.
+```
 
-【除螨喷雾专用字体条件】仅当主产品或直播间被明确识别为“除螨喷雾”时，必须读取 `dust-mite-spray-title-system.md`，只把其中的主标题字体要求并入上面的顶部标题系统；不得从该文件引入任何配色、标题区域、材质、底板、光效或装饰要求。其他品类删除本段，不得套用。
+If a protected pack/reference cannot be extracted faithfully, isolate the source product first and composite at the approved location; revise the preview before its approval. Rebuild the Phase 1 preview from actual layers.
 
-【人物】[如策划需要：成年人物数量、外观、服装、姿态、动作、位置；自然五官、手指与肢体。若策划不需要人物则完全不出现人物。] 若人物为坐姿且没有另行指定：主播严格位于画面与镜头中轴，面部、躯干、坐姿和肩线全部正对镜头，不得侧身、斜肩或偏离中轴；人物与桌体作为一组同步向镜头前移，形成近距离互动尺度。
+## Phase 2: sticker family
 
-【前景展台】[展台数量、左右/前后位置、造型、材质、透视。展台正面暂不出现营销文案。] 若人物为坐姿且没有另行指定：前景桌体必须居中、左右对称、正面平视，正立面水平展开，禁止三分之四角度、斜向椭圆台面和远处小桌；桌体必须占据画面下方的近镜前景，成为明确的前景视觉锚点。
+```text
+Create a clean 16:9 asset board of Chinese ecommerce marketing sticker designs. Image 1 is the structure-board authority for exact sticker count, sequence, grouping, copy, numbers, and footnotes. Image 2 is only a palette/material/shape/typography reference from the approved room; do not reproduce its scenery, host, stage, or products.
+Stickers, each appearing once: [ID, exact short text, grouping, main/sub role, approximate scale, outline]. Keep combined modules as one unit and independent ones separate, uncropped, with clear gutters. Use the room's [specific motif] across varied contour and material treatments. Reserve legible surfaces for dense contract text, which will be typeset exactly afterward.
+Only isolated sticker assets on a neutral board. No room, person, physical stage/product, extra claim, decoration without a job, watermark.
+```
 
-【产品授权】默认：实体产品数量=0；桌面与展台保持无产品状态；禁止产品瓶、包装盒、产品模型、产品剪影或占位产品。仅当用户或策划文字明确要求加入产品时，将本段替换为：[授权来源；产品参考；准确数量；包装外观；主次比例；摆放姿态；展台对应关系；自然遮挡和标签清晰度。]
+Cut every final sticker into a transparent individual asset. Restore exact text deterministically where necessary. Assemble the approval board from those assets; do not ask a model to render a second approximate copy of the approved board.
 
-【视觉系统】[品牌调性、主辅色、灯光、材质、真实度、氛围、重复设计母题。]
+## Local edit
 
-【留白】围绕已经确定的展台、主播动作和平台UI预留明确区域；只有产品得到明确授权时，才同时为其预留空间。
+```text
+Edit image 1. Change only [one exact target] from [old state] to [new state]. Keep [specific protected objects, title/copy, identity, packaging, camera, lighting, coordinates] unchanged. Remove the old state completely. No additional objects or text.
+```
 
-【限制】禁止出现卖点卡、数据卡、报告卡、权益条、场景贴片、展台营销文案、占位框、PPT网格、乱码、水印或参考图文案；产品未授权时禁止出现任何产品或产品占位物，产品已授权时禁止漏产品、加产品、改包装或让展台与产品关系含糊。
+Inspect the output against the input. If two scoped attempts damage locked content, rebuild only the affected asset/phase.
 
-## B. Phase 2: styled sticker board
+## Transparency
 
-以图1的16:9白底“贴片结构母板”为内容与关系的唯一权威，以图2已确认的“背景＋标题＋人物＋前景展台＋产品”仅作为配色、材质、轮廓、字体、装饰节奏和可用空间的参考，生成一张1920×1080的中文电商直播间贴片设计母板。
-
-【必须锁定】
-- 贴片总数：[逐项列出]
-- 组合贴片：[必须作为一个整体的内容]
-- 独立贴片：[必须彼此分开的内容]
-- 准确文案、数字、单位、上标、脚注和顺序：[逐项列出]
-
-【设计要求】
-- 每个贴片独立展示，留有充足白色间隔，外轮廓完整、不重叠、不裁切；
-- 主卖点、次卖点、数据、报告、权益和场景模块有明确尺寸与材质层级；
-- 继承图2的[颜色、材质、几何母题、字体节奏]，但不复制图2的房间构图；
-- 避免纯白圆角卡片墙、统一胶囊、默认办公字体和平均分栏；
-- 使用[半透明层、异形轮廓、错位底层、局部缺口、描边、柔光等实际方向]。
-
-【限制】禁止生成完整直播间、人物、背景空间、前景展台和实体产品；禁止合并、遗漏、重复、替换、改写或新增任何贴片与商业结论。
-
-## C. Phase 1 local edit
-
-以已确认的第一阶段图为唯一母版，只执行：
-
-【允许修改】[场景、标题或人物中的准确元素与操作。]
-
-【旧状态清除】[必须清理的旧内容。]
-
-【新状态】[位置、比例、层级和避让。]
-
-【严格锁定】其余背景、镜头、标题、人物、前景展台、产品数量、包装、位置、配色、材质、光线和安全区全部不变。仍然禁止出现任何非标题营销贴片。
-
-若当前画面为坐姿主播且用户未明确改变机位，把“主播居中正视、坐姿与肩线正对镜头、桌体左右对称正面视图、人物与桌体共同处于近镜前景”列入【严格锁定】；局部修改不得使其回退为偏轴、侧身、斜桌或中远景。
-
-若第一阶段产品数量锁定为0，把“桌面与展台继续无产品；禁止产品瓶、包装盒、模型、剪影和占位物”列入【严格锁定】；任何标题、人物、背景、颜色或材质修改都不得擅自加入产品。
-
-## D. Phase 2 local edit
-
-以已确认的16:9贴片设计母板为唯一母版，只执行：
-
-【允许修改】[准确贴片与操作。]
-
-【旧状态清除】[旧造型、旧文案或旧位置。]
-
-【新状态】[新轮廓、材质、层级、间隔或准确文案。]
-
-【严格锁定】其他贴片的数量、文案、组合关系、顺序、造型、材质和位置全部不变；禁止加入场景、人物、展台或实体产品。
-
-## E. Phase 3 scoped integration edit
-
-以已确认的完整直播间预览为唯一母版，仅修正[一个模块]的透视、遮挡或边缘融合。
-
-【允许修改】[准确模块。]
-
-【旧状态清除】[必须清理的旧状态。]
-
-【新状态】[坐标、比例、前后关系和避让要求。]
-
-【严格锁定】第一阶段的背景、标题、人物、镜头、配色、光线、前景展台、产品数量、包装、比例、透视和坐标；第二阶段的全部贴片设计；其他贴片、文案和坐标全部不变。禁止全图重绘或新增任何元素。
-
-## F. Pure background
-
-以已确认的第一阶段与完整预览为参考，输出同一镜头、构图、光线、色彩和景深的1080×1920纯背景。移除全部人物、标题、Logo、贴片、产品、台子、报告、权益信息和前景营销装饰，自然补全遮挡区域。不得改变机位、透视、地平线、建筑、家具或环境比例。
-
-## G. Transparent sticker atlas
-
-以已确认的16:9贴片设计母板为唯一母版，保留全部非标题营销贴片的造型、文案、比例和内部层级，将每个贴片独立排列在1920×1080透明画布上。所有贴片之间留有透明间隔，外轮廓完整、不重叠、不裁切。移除白底、房间、人物、顶部大标题、实体产品和物理展台。输出真实RGBA透明PNG。
-
-若不能直接输出透明通道，将空白区域渲染为均匀纯色 #FF00FF，贴片本体不得出现该颜色，再使用 `scripts/chroma_to_alpha.py`。
-
-## H. Transparent top title
-
-以已确认的第一阶段图为唯一母版，仅保留顶部大标题系统：主标题、标题绑定Logo、副标题、标题底板和与标题不可分割的装饰。保持原坐标、比例、字体层级、描边、光效和相互关系。移除背景、人物、营销贴片、产品和展台。画布1080×1920，其余区域为真实透明。
-
-## I. Transparent foreground stage plus products
-
-以已确认的第一阶段构图和第三阶段完整预览为唯一母版，仅保留第一阶段已确认的前景物理展台、台面结构及其对应实体产品。保持原坐标、比例、透视、包装、产品数量、主次关系和自然遮挡。移除背景、人物、顶部标题、营销文案、标签、报告和图标。画布1080×1920，其余区域为真实透明。输出文件名为“前景展台+产品.png”。
-
-如果台身上的文案属于营销信息，文案不得进入本层，应由贴片资产与定位层承载。
+Ask the built-in tool for real transparent background and preserve the returned alpha. If direct transparency fails and a subject has no magenta, a uniform #FF00FF matte plus `chroma_to_alpha.py` is a repair path; inspect fine edges and translucent material. Never treat a painted checkerboard or opaque white as transparency.

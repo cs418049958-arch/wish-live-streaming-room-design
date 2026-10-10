@@ -1,9 +1,8 @@
 interface:
-  display_name: Wish 直播间设计
-  short_description: 首轮锁定背景标题人物展台产品，再统一贴片并拆分透明生产图层
-  default_prompt: Use $wish-live-streaming-room-design to first lock the background,
-    title, host, foreground stage, and products, then design stickers and deliver
-    transparent production assets.
+  display_name: Wish 直播间设计 GPT-6
+  short_description: 从策划到四阶段直播间设计，精准贴片、生产图层与回拼校验
+  default_prompt: Use $wish-live-streaming-room-design-gpt6 to design a 9:16 livestream
+    room from my planning materials and deliver validated production layers.
   icon_small: assets/icon.svg
   icon_large: assets/icon.svg
 policy:
