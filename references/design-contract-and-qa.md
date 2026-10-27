@@ -14,14 +14,14 @@ Write one sentence naming the campaign idea and physical/graphic mechanism (for 
 
 For alternatives, keep locked content identical while varying at least three of architecture, camera depth, title structure, stage geometry, lighting, material, and sticker contour. Do not require a prescribed motif if the brand reference points elsewhere.
 
-Seated presenter default applies only when no explicit contrary planning or user direction covers that attribute: frontal face/torso, centered camera axis, close conversational scale, symmetric straight-on table. An override may affect only one attribute; retain the others. Product count defaults to zero unless explicit inclusion is recorded. Never add packs, silhouettes, boxes, placeholders, or new claims to a zero-product scene.
+Seated presenter default applies only when no explicit contrary planning or user direction covers that attribute: frontal face/torso, centered camera axis, close conversational scale, symmetric straight-on table. Apply the landmark ranges and composition-only reference in `references/seated-host-composition.md` from the first spatial preview. Keep the host large and lower-middle; extend the foreground desk across the full bottom without a visible floor strip underneath. An override may affect only one attribute; retain the others. Product count defaults to zero unless explicit inclusion is recorded. Never add packs, silhouettes, boxes, placeholders, or new claims to a zero-product scene.
 
 ## ImageGen and text QA
 
 - Number every image and state its permitted job. Prevent a style reference from donating copy or products. Use generation for a new scene; use an edit target for changes to an approved image.
 - Start prompts with intended image and main subject; then composition, style, exact short text, locks, and concise avoid list. Remove inactive-phase instructions.
 - Quote each exact title or short sticker phrase and its count. Check all Chinese, numbers, units, brand names, and footnotes in the result. Use deterministic text compositing for dense or unstable wording; never fabricate data.
-- For requested physical products, compare silhouette, cap/trigger, label hierarchy, color, count, scale, and stage association with the supplied reference. Prefer protected source cutouts when an exact pack must be preserved.
+- For requested physical products, compare silhouette, cap/trigger, label hierarchy, color, count, scale, and stage association with the supplied reference. Use the supplied pack as an identity reference during whole-image design; defer production cutouts until Phase 4.
 - For a local edit, request one change and check all invariants. Inspect the edited image before accepting it.
 
 If the main product or room is explicitly 除螨喷雾, also apply the font-only pass/fail checks in `dust-mite-spray-title-system.md`. Do not apply that conditional to other categories.
@@ -34,22 +34,28 @@ If the main product or room is explicitly 除螨喷雾, also apply the font-only
 - Background differs structurally from the planning mockup unless replication was requested.
 - Concept links title, scene, and foreground without sacrificing host/UI space.
 - Product identity, exact count, anatomy, title text, safe areas, and natural overlap pass.
-- Pure background inpaints removed areas cleanly. RGBA title/stage/host edges have no halo, matte, clipped contour, or unintended pixels. Internal recomposite reproduces the preview.
+- For seated-host/table scenes, presenter size and landmark positions match the composition contract, hands contact the tabletop, and the desk fills both side edges and the entire bottom. Required floor remains behind/beside the host; no floor strip is visible below the desk.
+- Review the whole ImageGen image directly. Do not require pure-background inpainting, RGBA extraction, or layer reconstruction before approval.
 
 ### Phase 2
 
-- Every module has one ID and correct grouping, sequence, text, unit, footnote, shape, and alpha cutout.
-- Atlas-ready assets reconstruct the styled board; no room/host/stage/physical product contaminates the sticker assets.
+- The whole sticker board has correct module count, grouping, sequence, text, units, footnotes, and uncropped shapes.
+- Outer artboard and gutters are solid pure white (#FFFFFF), without tint, gradient, texture, scenery, or a shared ground shadow. Sticker bodies retain substantial colored backgrounds/title blocks consistent with the approved style; white artboard must not flatten all stickers into white-only thin frames.
+- Every independent asset/group has a white moat and edge margin of at least 4.5% of the canvas short edge (about 48px at 1920×1080; prefer 48–64px or wider), measured from full extents including shadows, decoration and text. No overlap, tangent edge, cross-group decoration or common base remains. Independent report cards each pass this check; explicitly combined modules stay combined.
+- Requested blank certificate areas remain plain white and empty within a sufficiently broad backing/header. Check at full size that each complete group can be separately rectangular-selected without including a neighbor; revise the whole board if spacing fails.
+- No room/host/stage/physical product contaminates the board. Do not require individual transparent assets or atlas reconstruction yet.
 - Hierarchy works at phone size; silhouettes vary purposefully; no copy is unreadable.
 
 ### Phase 3
 
-- Approved Phase 1 and 2 pixels remain stable. Sticker coordinates, scale, hierarchy, gaps, UI avoidance, and occlusion match plan.
-- The positioned layer is built from the same sticker files and transforms used by the preview.
+- Accepted Phase 1 elements and Phase 2 sticker designs remain visually consistent; inspect scoped ImageGen edits for drift. Sticker coordinates, scale, hierarchy, gaps, UI avoidance, and occlusion match plan.
+- Review the complete whole-image preview directly; defer positioned layers, cutouts, and production manifests until Phase 4.
 - No old position, duplicate, hidden footnote, or unsupported claim remains.
 
-### Production and regression
+### Production and regression — after full approval only
 
+- Extract all layers and sticker assets now. Inpaint removed regions cleanly; check title/stage/host/sticker alpha edges for halos, mattes, clipping, and unintended pixels.
+- Preserve the approved final whole image as the comparison master. Repair extraction rather than substituting a newly reconstructed approval image.
 - Approved copy, identity, product count, and relationships survive every revision.
 - The validator passes dimensions, alpha, manifest coverage, and full-preview comparison. Inspect the difference image and layered preview visually.
 - Keep a preview-only host out of the production delivery while using its retained layer for reconstruction QA. If stage/host occlusion needs multiple sublayers, deliver the needed stack with explicit order.

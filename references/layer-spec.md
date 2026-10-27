@@ -1,5 +1,7 @@
 # Production layers and reconstruction
 
+**Apply this specification only in Phase 4, after spatial, sticker, and complete-room approvals. Phases 1–3 use whole-image previews without production separation.**
+
 ## Canvases and ownership
 
 Final coordinate canvas: 1080×1920, (0,0) top-left. Use this full canvas for `背景.jpg`, `顶部大标题.png`, `前景展台+产品.png` where applicable, `work/贴片定位层-9x16.png`, and internal `work/人物预览层.png` where applicable. Do not trim or recenter. Sticker atlas: 1920×1080 with alpha gutters. An atlas is an asset sheet, not a positioned layer.
@@ -9,13 +11,13 @@ Final coordinate canvas: 1080×1920, (0,0) top-left. Use this full canvas for `�
 - `前景展台+产品.png`: physical stage and explicitly requested physical products, with their attached shadows; no marketing copy. Omit only when both are absent.
 - `work/人物预览层.png`: generated host surrogate for visual approval and comparison, never a default delivered asset. A requested fixed virtual host may be published as `人物.png`.
 - `贴片合集-16x9.png`: separately framed approved marketing stickers, complete and uncropped; no title, scenery, stage, physical product, or host.
-- `work/贴片定位层-9x16.png`: the exact sticker instances/transforms from Phase 3 at final coordinates.
+- `work/贴片定位层-9x16.png`: stickers extracted in Phase 4 and placed to match the approved Phase 3 final coordinates.
 
 Default preview stack back-to-front: background, preview/live host, top title, stage/products, positioned stickers. If physical host-stage occlusion requires another order, split the stage into named front/back transparent sublayers and retain the stack in the contract; do not pretend one layer can reproduce an impossible interleave.
 
-## Source-to-approval rule
+## Approval-to-separation rule
 
-Derive Phase 1 preview from deliverable-intent layers before user review. Retain generated raw draft only as a working reference. Derive Phase 2 approved board from isolated sticker assets. Derive Phase 3 preview from both approved source sets. Phase 4 packages the same sources; it must not regenerate approved artwork. Normalize built-in generated image dimensions to final coordinate canvases once, before extraction. When the user explicitly chooses an API with custom size controls, valid 9:16 and 16:9 generation sizes include 1152×2048 and 2048×1152; resize to final delivery dimensions once.
+Use ImageGen whole images for Phase 1 spatial review, Phase 2 board review, and Phase 3 complete-room review. Keep them as approved references. Only after final approval, use the approved Phase 3 whole image as the separation authority and earlier approved whole images as supplemental references. Extract all production layers and sticker assets in Phase 4, then reconstruct and compare against the unchanged approved final master. Repair extraction errors without redrawing the accepted design or replacing its master with a reconstruction. Normalize built-in generated image dimensions to final coordinate canvases once, before extraction. When the user explicitly chooses an API with custom size controls, valid 9:16 and 16:9 generation sizes include 1152×2048 and 2048×1152; resize to final delivery dimensions once.
 
 Each transparent PNG must have real alpha zero outside visible objects and nonzero within. Inspect semitransparent glass, glow, hair, shadows, rounded contours, chroma spill, clipped edges, and title/sticker counters. Inpaint pure background behind removed items. A matting key is a fallback only.
 
