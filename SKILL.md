@@ -12,7 +12,7 @@ Create an original, coherent livestream visual and deliver assets that reconstru
 - `references/workflow-contract.md`: stage gates, interpretation, revisions, approvals. Read for every task.
 - `references/design-contract-and-qa.md`: concept, priority, asset ownership, QA. Read for every task.
 - `references/prompt-templates.md`: phase-specific ImageGen and edit prompts. Read before generation.
-- `references/seated-host-composition.md`: host scale/position and full-bleed bottom table. Read and inspect its composition-only image before every seated-host Phase 1 generation.
+- `references/seated-host-composition.md`: host scale/position and full-bleed bottom table. Read before every seated-host Phase 1 generation; inspect its composition-only image when bundled. If the image is absent, apply the written landmark table and current user references without blocking generation.
 - `references/layer-spec.md`: dimensions, alpha, manifest, validation. Read before Phase 4 separation and delivery.
 - `references/dust-mite-spray-title-system.md`: **only** when main product/room is explicitly 除螨喷雾. It governs main-title font alone.
 

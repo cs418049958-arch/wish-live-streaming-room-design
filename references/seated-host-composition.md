@@ -2,7 +2,7 @@
 
 Apply these defaults from the first Phase 1 direction whenever a seated presenter and foreground table are required. Explicit task-specific pose, placement, or framing overrides only the affected attributes. Do not add a host or table to tasks that do not call for them.
 
-Inspect `assets/composition-reference/seated-host-bottom-fill.jpg` as a composition-only reference: the user corrected the presenter scale, lowered its position, and extended the desk through the canvas bottom. Borrow proportions and spatial relationships; never borrow its campaign, copy, person identity, palette, room, or visible manual-paste seams for another brief.
+When bundled, inspect `assets/composition-reference/seated-host-bottom-fill.jpg` as an optional composition-only reference: the user corrected the presenter scale, lowered its position, and extended the desk through the canvas bottom. Borrow proportions and spatial relationships; never borrow its campaign, copy, person identity, palette, room, or visible manual-paste seams for another brief. If the image is absent from a repository/export, use the normalized landmark table below and current user-supplied references as the complete composition specification. Do not block generation, invent the missing image, or substitute an unrelated person or room.
 
 ## Normalized 9:16 composition
 
