@@ -33,7 +33,7 @@
 | 地板展示 | 地板主要保留在人物身后和两侧、桌面以上区域。 |
 | 禁止情况 | 人物过小或位置过高、桌底露出一条地板、桌子悬空、完整桌脚挤在画面内。 |
 
-完整比例和检查项见 [坐姿主播与桌子构图规范](references/seated-host-composition.md)。规范内的参考图片为可选补充；仓库未附该图片时，按文字比例表及当次用户参考执行。
+完整比例和检查项见 [坐姿主播与桌子构图规范](references/seated-host-composition.md)。仓库已附[坐姿主播构图参考图](assets/composition-reference/seated-host-bottom-fill.jpg)，可结合文字比例表及当次用户参考使用。
 
 ## 贴片画布、色块与间距
 
@@ -97,6 +97,7 @@
 | [layer-spec.md](references/layer-spec.md) | 第 04 阶段画布、素材归属、透明通道、清单及回拼校验。 |
 | [dust-mite-spray-title-system.md](references/dust-mite-spray-title-system.md) | 仅在除螨喷雾直播间启用的标题字体专项规范。 |
 | [agents/openai.yaml](agents/openai.yaml) | 技能显示与调用元数据。 |
+| [assets/composition-reference/seated-host-bottom-fill.jpg](assets/composition-reference/seated-host-bottom-fill.jpg) | 坐姿主播与前景桌子构图参考。 |
 | [assets/four-phase-reference/](assets/four-phase-reference/) | 阶段归属示例，不能直接套用其活动、产品、构图或风格。 |
 | [scripts/validate_live_room_layers.py](scripts/validate_live_room_layers.py) | 第 04 阶段素材与回拼检查脚本。 |
 | [scripts/chroma_to_alpha.py](scripts/chroma_to_alpha.py) | 必要时的纯色底转透明修复辅助工具。 |
